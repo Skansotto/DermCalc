@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.casati.dermcalc.ui.theme.DermCalcTheme
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +47,7 @@ fun BmiScreen(
                 value = uiState.peso,
                 onValueChange = viewModel::onPesoChange,
                 label = { Text("Peso (kg)") },
+                isError = uiState.messaggioErrore != null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -52,14 +55,27 @@ fun BmiScreen(
                 value = uiState.altezza,
                 onValueChange = viewModel::onAltezzaChange,
                 label = { Text("Altezza (m)") },
+                isError = uiState.messaggioErrore != null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
-                onClick = { },
+                onClick = viewModel::onCalcolaClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Calcola")
+            }
+            uiState.messaggioErrore?.let { messaggio ->
+                Text(
+                    text = messaggio,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            uiState.risultato?.let { risultato ->
+                Text(
+                    text = "BMI: ${String.format(Locale.getDefault(), "%.2f", risultato)}",
+                    style = MaterialTheme.typography.headlineSmall
+                )
             }
         }
     }
