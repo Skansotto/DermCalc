@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.casati.dermcalc.ui.screens.bmi.BmiScreen
+import com.casati.dermcalc.ui.screens.bsa.BsaScreen
 import com.casati.dermcalc.ui.screens.home.HomeScreen
 
 @Composable
@@ -27,7 +28,7 @@ fun DermCalcNavHost(navController: NavHostController = rememberNavController()) 
             )
         }
         composable(Screen.Bmi.route) { BmiScreen() }
-        composable(Screen.Bsa.route) { PlaceholderScreen(title = "BSA") }
+        composable(Screen.Bsa.route) { BsaScreen() }
         composable(Screen.Pasi.route) { PlaceholderScreen(title = "PASI") }
         composable(Screen.Easi.route) { PlaceholderScreen(title = "EASI") }
     }
