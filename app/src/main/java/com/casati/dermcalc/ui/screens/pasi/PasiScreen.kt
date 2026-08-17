@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.casati.dermcalc.ui.theme.DermCalcTheme
+import java.util.Locale
 
-// TODO: Aggiungere distretti Tronco e Arti Inferiori.
-private val DISTRETTI_VISIBILI = listOf(PasiDistretto.TESTA, PasiDistretto.ARTI_SUPERIORI)
+private val DISTRETTI_VISIBILI = PasiDistretto.entries
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,22 +39,40 @@ fun PasiScreen(
         modifier = modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text("PASI") }) }
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(DISTRETTI_VISIBILI) { distretto ->
-                val valori = uiState.valori.getValue(distretto)
-                DistrettoCard(
-                    distretto = distretto,
-                    valori = valori,
-                    onEritemaChange = { viewModel.onEritemaChange(distretto, it) },
-                    onIndurimentoChange = { viewModel.onIndurimentoChange(distretto, it) },
-                    onDesquamazioneChange = { viewModel.onDesquamazioneChange(distretto, it) },
-                    onAreaChange = { viewModel.onAreaChange(distretto, it) }
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(DISTRETTI_VISIBILI) { distretto ->
+                    val valori = uiState.valori.getValue(distretto)
+                    DistrettoCard(
+                        distretto = distretto,
+                        valori = valori,
+                        onEritemaChange = { viewModel.onEritemaChange(distretto, it) },
+                        onIndurimentoChange = { viewModel.onIndurimentoChange(distretto, it) },
+                        onDesquamazioneChange = { viewModel.onDesquamazioneChange(distretto, it) },
+                        onAreaChange = { viewModel.onAreaChange(distretto, it) }
+                    )
+                }
+            }
+            Button(
+                onClick = viewModel::onCalcolaClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Calcola")
+            }
+            if (uiState.risultato != null) {
+                Text(
+                    text = "PASI: ${String.format(Locale.getDefault(), "%.1f", uiState.risultato)} " +
+                        "(${uiState.interpretazione})",
+                    style = MaterialTheme.typography.headlineSmall
                 )
             }
         }
