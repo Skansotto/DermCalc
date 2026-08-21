@@ -1,4 +1,4 @@
-package com.casati.dermcalc.ui.screens.pasi
+package com.casati.dermcalc.ui.screens.easi
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,21 +23,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.theme.DermCalcTheme
-import java.util.Locale
-
-private val DISTRETTI_VISIBILI = PasiDistretto.entries
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasiScreen(
+fun EasiScreen(
     modifier: Modifier = Modifier,
-    viewModel: PasiViewModel = viewModel()
+    viewModel: EasiViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text("PASI") }) }
+        topBar = { TopAppBar(title = { Text("EASI") }) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -50,30 +47,25 @@ fun PasiScreen(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(DISTRETTI_VISIBILI) { distretto ->
+                items(EasiDistretto.entries) { distretto ->
                     val valori = uiState.valori.getValue(distretto)
                     DistrettoCard(
                         distretto = distretto,
                         valori = valori,
                         onEritemaChange = { viewModel.onEritemaChange(distretto, it) },
-                        onIndurimentoChange = { viewModel.onIndurimentoChange(distretto, it) },
-                        onDesquamazioneChange = { viewModel.onDesquamazioneChange(distretto, it) },
+                        onEdemaPapulazioneChange = { viewModel.onEdemaPapulazioneChange(distretto, it) },
+                        onEscoriazioniChange = { viewModel.onEscoriazioniChange(distretto, it) },
+                        onLichenificazioneChange = { viewModel.onLichenificazioneChange(distretto, it) },
                         onAreaChange = { viewModel.onAreaChange(distretto, it) }
                     )
                 }
             }
+            // TODO: Implementazione bottone predisposto per il calcolo finale
             Button(
-                onClick = viewModel::onCalcolaClick,
+                onClick = { },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Calcola")
-            }
-            if (uiState.risultato != null) {
-                Text(
-                    text = "PASI: ${String.format(Locale.getDefault(), "%.1f", uiState.risultato)} " +
-                        "(${uiState.interpretazione})",
-                    style = MaterialTheme.typography.headlineSmall
-                )
             }
         }
     }
@@ -81,11 +73,12 @@ fun PasiScreen(
 
 @Composable
 private fun DistrettoCard(
-    distretto: PasiDistretto,
-    valori: PasiDistrettoValori,
+    distretto: EasiDistretto,
+    valori: EasiDistrettoValori,
     onEritemaChange: (Int) -> Unit,
-    onIndurimentoChange: (Int) -> Unit,
-    onDesquamazioneChange: (Int) -> Unit,
+    onEdemaPapulazioneChange: (Int) -> Unit,
+    onEscoriazioniChange: (Int) -> Unit,
+    onLichenificazioneChange: (Int) -> Unit,
     onAreaChange: (Int) -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
@@ -94,9 +87,10 @@ private fun DistrettoCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = distretto.label, style = MaterialTheme.typography.titleMedium)
-            ParametroSlider("Eritema", valori.eritema, 0..4, onEritemaChange)
-            ParametroSlider("Indurimento", valori.indurimento, 0..4, onIndurimentoChange)
-            ParametroSlider("Desquamazione", valori.desquamazione, 0..4, onDesquamazioneChange)
+            ParametroSlider("Eritema", valori.eritema, 0..3, onEritemaChange)
+            ParametroSlider("Edema/Papulazione", valori.edemaPapulazione, 0..3, onEdemaPapulazioneChange)
+            ParametroSlider("Escoriazioni", valori.escoriazioni, 0..3, onEscoriazioniChange)
+            ParametroSlider("Lichenificazione", valori.lichenificazione, 0..3, onLichenificazioneChange)
             ParametroSlider("Area", valori.area, 0..6, onAreaChange)
         }
     }
@@ -104,8 +98,8 @@ private fun DistrettoCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun PasiScreenPreview() {
+private fun EasiScreenPreview() {
     DermCalcTheme {
-        PasiScreen()
+        EasiScreen()
     }
 }
