@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.update
 
 data class EasiUiState(
     val valori: Map<EasiDistretto, EasiDistrettoValori> =
-        EasiDistretto.entries.associateWith { EasiDistrettoValori() }
+        EasiDistretto.entries.associateWith { EasiDistrettoValori() },
+    val risultato: Double? = null
 )
 
 class EasiViewModel : ViewModel() {
@@ -35,6 +36,15 @@ class EasiViewModel : ViewModel() {
         aggiornaDistretto(distretto) { it.copy(area = valore.coerceIn(0, 6)) }
     }
 
+    fun onCalcolaClick() {
+        val punteggio = _uiState.value.valori.entries.sumOf { (distretto, valori) ->
+            distretto.peso *
+                (valori.eritema + valori.edemaPapulazione + valori.escoriazioni + valori.lichenificazione) *
+                valori.area
+        }
+        _uiState.update { it.copy(risultato = punteggio) }
+    }
+
     private fun aggiornaDistretto(
         distretto: EasiDistretto,
         trasformazione: (EasiDistrettoValori) -> EasiDistrettoValori
@@ -42,7 +52,7 @@ class EasiViewModel : ViewModel() {
         _uiState.update { stato ->
             val valoriAggiornati = stato.valori.toMutableMap()
             valoriAggiornati[distretto] = trasformazione(valoriAggiornati.getValue(distretto))
-            stato.copy(valori = valoriAggiornati)
+            stato.copy(valori = valoriAggiornati, risultato = null)
         }
     }
 }

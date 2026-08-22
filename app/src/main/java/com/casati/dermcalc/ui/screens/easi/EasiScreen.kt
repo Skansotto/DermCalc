@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.theme.DermCalcTheme
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,12 +61,17 @@ fun EasiScreen(
                     )
                 }
             }
-            // TODO: Implementazione bottone predisposto per il calcolo finale
             Button(
-                onClick = { },
+                onClick = viewModel::onCalcolaClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Calcola")
+            }
+            if (uiState.risultato != null) {
+                Text(
+                    text = "EASI: ${String.format(Locale.getDefault(), "%.1f", uiState.risultato)}",
+                    style = MaterialTheme.typography.headlineSmall
+                )
             }
         }
     }
