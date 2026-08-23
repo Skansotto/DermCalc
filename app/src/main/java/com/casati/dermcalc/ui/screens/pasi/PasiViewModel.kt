@@ -48,6 +48,10 @@ class PasiViewModel : ViewModel() {
         _uiState.update { it.copy(risultato = punteggio) }
     }
 
+    fun reset() {
+        _uiState.update { PasiUiState() }
+    }
+
     private fun aggiornaDistretto(
         distretto: PasiDistretto,
         trasformazione: (PasiDistrettoValori) -> PasiDistrettoValori

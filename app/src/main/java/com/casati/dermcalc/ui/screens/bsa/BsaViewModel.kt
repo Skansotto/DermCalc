@@ -26,4 +26,8 @@ class BsaViewModel : ViewModel() {
             stato.copy(regioniSelezionate = nuoveRegioni)
         }
     }
+
+    fun reset() {
+        _uiState.update { BsaUiState() }
+    }
 }

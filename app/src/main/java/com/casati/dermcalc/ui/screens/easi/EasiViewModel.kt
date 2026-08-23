@@ -45,6 +45,10 @@ class EasiViewModel : ViewModel() {
         _uiState.update { it.copy(risultato = punteggio) }
     }
 
+    fun reset() {
+        _uiState.update { EasiUiState() }
+    }
+
     private fun aggiornaDistretto(
         distretto: EasiDistretto,
         trasformazione: (EasiDistrettoValori) -> EasiDistrettoValori

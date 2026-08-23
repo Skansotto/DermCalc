@@ -52,6 +52,10 @@ class BmiViewModel : ViewModel() {
         _uiState.update { it.copy(risultato = bmi, messaggioErrore = null) }
     }
 
+    fun reset() {
+        _uiState.update { BmiUiState() }
+    }
+
     private fun mostraErrore(messaggio: String) {
         _uiState.update { it.copy(risultato = null, messaggioErrore = messaggio) }
     }
