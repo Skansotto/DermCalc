@@ -20,15 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.theme.DermCalcTheme
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @Composable
 fun EasiScreen(
@@ -39,9 +40,10 @@ fun EasiScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
+    val messaggioCalcoloCompletato = stringResource(R.string.messaggio_calcolo_completato)
 
     CalcolatoreScaffold(
-        titolo = "EASI",
+        titolo = stringResource(R.string.titolo_easi),
         snackbarHostState = snackbarHostState,
         onPulisciClick = { mostraDialogPulisci = true },
         modifier = modifier.fillMaxSize()
@@ -73,15 +75,16 @@ fun EasiScreen(
             Button(
                 onClick = {
                     viewModel.onCalcolaClick()
-                    scope.launch { snackbarHostState.showSnackbar("Calcolo completato.") }
+                    scope.launch { snackbarHostState.showSnackbar(messaggioCalcoloCompletato) }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Calcola")
+                Text(stringResource(R.string.azione_calcola))
             }
-            if (uiState.risultato != null) {
+            val risultato = uiState.risultato
+            if (risultato != null) {
                 Text(
-                    text = "EASI: ${String.format(Locale.getDefault(), "%.1f", uiState.risultato)}",
+                    text = stringResource(R.string.easi_risultato_formato, risultato),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
@@ -114,12 +117,12 @@ private fun DistrettoCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(text = distretto.label, style = MaterialTheme.typography.titleMedium)
-            ParametroSlider("Eritema", valori.eritema, 0..3, onEritemaChange)
-            ParametroSlider("Edema/Papulazione", valori.edemaPapulazione, 0..3, onEdemaPapulazioneChange)
-            ParametroSlider("Escoriazioni", valori.escoriazioni, 0..3, onEscoriazioniChange)
-            ParametroSlider("Lichenificazione", valori.lichenificazione, 0..3, onLichenificazioneChange)
-            ParametroSlider("Area", valori.area, 0..6, onAreaChange)
+            Text(text = stringResource(distretto.labelRes), style = MaterialTheme.typography.titleMedium)
+            ParametroSlider(stringResource(R.string.param_eritema), valori.eritema, 0..3, onEritemaChange)
+            ParametroSlider(stringResource(R.string.easi_param_edema_papulazione), valori.edemaPapulazione, 0..3, onEdemaPapulazioneChange)
+            ParametroSlider(stringResource(R.string.easi_param_escoriazioni), valori.escoriazioni, 0..3, onEscoriazioniChange)
+            ParametroSlider(stringResource(R.string.easi_param_lichenificazione), valori.lichenificazione, 0..3, onLichenificazioneChange)
+            ParametroSlider(stringResource(R.string.param_area), valori.area, 0..6, onAreaChange)
         }
     }
 }

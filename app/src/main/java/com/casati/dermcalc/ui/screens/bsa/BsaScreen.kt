@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.theme.DermCalcTheme
@@ -37,7 +39,7 @@ fun BsaScreen(
     var mostraDialogPulisci by remember { mutableStateOf(false) }
 
     CalcolatoreScaffold(
-        titolo = "BSA",
+        titolo = stringResource(R.string.titolo_bsa),
         snackbarHostState = snackbarHostState,
         onPulisciClick = { mostraDialogPulisci = true },
         modifier = modifier.fillMaxSize()
@@ -50,7 +52,7 @@ fun BsaScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Seleziona le aree corporee coinvolte:",
+                text = stringResource(R.string.bsa_istruzioni),
                 style = MaterialTheme.typography.bodyLarge
             )
             LazyColumn(modifier = Modifier.weight(1f)) {
@@ -64,18 +66,24 @@ fun BsaScreen(
                             checked = selezionata,
                             onCheckedChange = { checked -> viewModel.onRegioneToggle(regione, checked) }
                         )
-                        Text(text = "${regione.label} (${regione.percentuale}%)")
+                        Text(
+                            text = stringResource(
+                                R.string.bsa_regione_formato,
+                                stringResource(regione.labelRes),
+                                regione.percentuale
+                            )
+                        )
                     }
                 }
             }
             if (uiState.regioniSelezionate.isEmpty()) {
                 Text(
-                    text = "Seleziona almeno un'area per calcolare la BSA.",
+                    text = stringResource(R.string.bsa_area_vuota),
                     color = MaterialTheme.colorScheme.error
                 )
             } else {
                 Text(
-                    text = "BSA: ${uiState.totale}%",
+                    text = stringResource(R.string.bsa_risultato_formato, uiState.totale),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

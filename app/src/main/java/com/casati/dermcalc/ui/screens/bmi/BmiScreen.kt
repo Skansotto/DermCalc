@@ -19,15 +19,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.theme.DermCalcTheme
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @Composable
 fun BmiScreen(
@@ -39,8 +40,10 @@ fun BmiScreen(
     val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
 
+    val messaggioCalcoloCompletato = stringResource(R.string.messaggio_calcolo_completato)
+
     CalcolatoreScaffold(
-        titolo = "BMI",
+        titolo = stringResource(R.string.titolo_bmi),
         snackbarHostState = snackbarHostState,
         onPulisciClick = { mostraDialogPulisci = true },
         modifier = modifier.fillMaxSize()
@@ -55,7 +58,7 @@ fun BmiScreen(
             OutlinedTextField(
                 value = uiState.peso,
                 onValueChange = viewModel::onPesoChange,
-                label = { Text("Peso (kg)") },
+                label = { Text(stringResource(R.string.bmi_label_peso)) },
                 isError = uiState.messaggioErrore != null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth()
@@ -63,7 +66,7 @@ fun BmiScreen(
             OutlinedTextField(
                 value = uiState.altezza,
                 onValueChange = viewModel::onAltezzaChange,
-                label = { Text("Altezza (m)") },
+                label = { Text(stringResource(R.string.bmi_label_altezza)) },
                 isError = uiState.messaggioErrore != null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth()
@@ -71,16 +74,16 @@ fun BmiScreen(
             Button(
                 onClick = {
                     viewModel.onCalcolaClick()
-                    val messaggio = viewModel.uiState.value.messaggioErrore ?: "Calcolo completato."
+                    val messaggio = viewModel.uiState.value.messaggioErrore ?: messaggioCalcoloCompletato
                     scope.launch { snackbarHostState.showSnackbar(messaggio) }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Calcola")
+                Text(stringResource(R.string.azione_calcola))
             }
             uiState.risultato?.let { risultato ->
                 Text(
-                    text = "BMI: ${String.format(Locale.getDefault(), "%.2f", risultato)}",
+                    text = stringResource(R.string.bmi_risultato_formato, risultato),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

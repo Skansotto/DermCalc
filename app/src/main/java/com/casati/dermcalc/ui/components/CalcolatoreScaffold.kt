@@ -10,6 +10,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.casati.dermcalc.R
 
 // Scaffold comune a tutte le calcolatrici: TopBar con azione "Pulisci" e host per gli Snackbar.
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ fun CalcolatoreScaffold(
                 title = { Text(titolo) },
                 actions = {
                     TextButton(onClick = onPulisciClick) {
-                        Text("Pulisci")
+                        Text(stringResource(R.string.azione_pulisci))
                     }
                 }
             )

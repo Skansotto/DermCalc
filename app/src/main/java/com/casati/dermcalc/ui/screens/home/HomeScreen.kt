@@ -13,8 +13,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.theme.DermCalcTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ fun HomeScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text("DermCalc") }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -38,16 +40,16 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
         ) {
             Button(onClick = onNavigateToBmi, modifier = Modifier.fillMaxWidth()) {
-                Text("BMI")
+                Text(stringResource(R.string.titolo_bmi))
             }
             Button(onClick = onNavigateToBsa, modifier = Modifier.fillMaxWidth()) {
-                Text("BSA")
+                Text(stringResource(R.string.titolo_bsa))
             }
             Button(onClick = onNavigateToPasi, modifier = Modifier.fillMaxWidth()) {
-                Text("PASI")
+                Text(stringResource(R.string.titolo_pasi))
             }
             Button(onClick = onNavigateToEasi, modifier = Modifier.fillMaxWidth()) {
-                Text("EASI")
+                Text(stringResource(R.string.titolo_easi))
             }
         }
     }

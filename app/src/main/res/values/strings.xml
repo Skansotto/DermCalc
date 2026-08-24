@@ -1,3 +1,68 @@
 <resources>
     <string name="app_name">DermCalc</string>
+
+    <!-- Titoli schermate calcolatrici (Home + TopBar) -->
+    <string name="titolo_bmi">BMI</string>
+    <string name="titolo_bsa">BSA</string>
+    <string name="titolo_pasi">PASI</string>
+    <string name="titolo_easi">EASI</string>
+
+    <!-- Azioni comuni -->
+    <string name="azione_calcola">Calcola</string>
+    <string name="azione_pulisci">Pulisci</string>
+    <string name="azione_conferma">Conferma</string>
+    <string name="azione_annulla">Annulla</string>
+
+    <!-- Dialog di conferma pulizia dati -->
+    <string name="dialog_pulisci_titolo">Pulisci i dati</string>
+    <string name="dialog_pulisci_messaggio">Vuoi cancellare tutti i valori inseriti in questa schermata?</string>
+
+    <!-- Snackbar -->
+    <string name="messaggio_calcolo_completato">Calcolo completato.</string>
+
+    <!-- Componente ParametroSlider -->
+    <string name="formato_parametro_slider">%1$s: %2$d</string>
+
+    <!-- BMI -->
+    <string name="bmi_label_peso">Peso (kg)</string>
+    <string name="bmi_label_altezza">Altezza (m)</string>
+    <string name="bmi_risultato_formato">BMI: %1$.2f</string>
+
+    <!-- BSA -->
+    <string name="bsa_istruzioni">Seleziona le aree corporee coinvolte:</string>
+    <string name="bsa_area_vuota">Seleziona almeno un\'area per calcolare la BSA.</string>
+    <string name="bsa_risultato_formato">BSA: %1$d%%</string>
+    <string name="bsa_regione_formato">%1$s (%2$d%%)</string>
+
+    <!-- Regioni BSA (regola del nove) -->
+    <string name="bsa_regione_testa_collo">Testa e collo</string>
+    <string name="bsa_regione_arto_superiore_destro">Arto superiore destro</string>
+    <string name="bsa_regione_arto_superiore_sinistro">Arto superiore sinistro</string>
+    <string name="bsa_regione_tronco_anteriore">Tronco anteriore</string>
+    <string name="bsa_regione_tronco_posteriore">Tronco posteriore</string>
+    <string name="bsa_regione_arto_inferiore_destro">Arto inferiore destro</string>
+    <string name="bsa_regione_arto_inferiore_sinistro">Arto inferiore sinistro</string>
+    <string name="bsa_regione_genitali">Genitali</string>
+
+    <!-- Distretti corporei PASI/EASI -->
+    <string name="distretto_testa">Testa</string>
+    <string name="distretto_testa_collo">Testa e collo</string>
+    <string name="distretto_arti_superiori">Arti superiori</string>
+    <string name="distretto_tronco">Tronco</string>
+    <string name="distretto_arti_inferiori">Arti inferiori</string>
+
+    <!-- Parametri clinici condivisi PASI/EASI -->
+    <string name="param_eritema">Eritema</string>
+    <string name="param_area">Area</string>
+
+    <!-- Parametri clinici PASI -->
+    <string name="pasi_param_indurimento">Indurimento</string>
+    <string name="pasi_param_desquamazione">Desquamazione</string>
+    <string name="pasi_risultato_formato">PASI: %1$.1f (%2$s)</string>
+
+    <!-- Parametri clinici EASI -->
+    <string name="easi_param_edema_papulazione">Edema/Papulazione</string>
+    <string name="easi_param_escoriazioni">Escoriazioni</string>
+    <string name="easi_param_lichenificazione">Lichenificazione</string>
+    <string name="easi_risultato_formato">EASI: %1$.1f</string>
 </resources>

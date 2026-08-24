@@ -20,15 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.theme.DermCalcTheme
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 private val DISTRETTI_VISIBILI = PasiDistretto.entries
 
@@ -41,9 +42,10 @@ fun PasiScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
+    val messaggioCalcoloCompletato = stringResource(R.string.messaggio_calcolo_completato)
 
     CalcolatoreScaffold(
-        titolo = "PASI",
+        titolo = stringResource(R.string.titolo_pasi),
         snackbarHostState = snackbarHostState,
         onPulisciClick = { mostraDialogPulisci = true },
         modifier = modifier.fillMaxSize()
@@ -74,16 +76,20 @@ fun PasiScreen(
             Button(
                 onClick = {
                     viewModel.onCalcolaClick()
-                    scope.launch { snackbarHostState.showSnackbar("Calcolo completato.") }
+                    scope.launch { snackbarHostState.showSnackbar(messaggioCalcoloCompletato) }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Calcola")
+                Text(stringResource(R.string.azione_calcola))
             }
-            if (uiState.risultato != null) {
+            val risultato = uiState.risultato
+            if (risultato != null) {
                 Text(
-                    text = "PASI: ${String.format(Locale.getDefault(), "%.1f", uiState.risultato)} " +
-                        "(${uiState.interpretazione})",
+                    text = stringResource(
+                        R.string.pasi_risultato_formato,
+                        risultato,
+                        uiState.interpretazione.orEmpty()
+                    ),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
@@ -115,11 +121,11 @@ private fun DistrettoCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(text = distretto.label, style = MaterialTheme.typography.titleMedium)
-            ParametroSlider("Eritema", valori.eritema, 0..4, onEritemaChange)
-            ParametroSlider("Indurimento", valori.indurimento, 0..4, onIndurimentoChange)
-            ParametroSlider("Desquamazione", valori.desquamazione, 0..4, onDesquamazioneChange)
-            ParametroSlider("Area", valori.area, 0..6, onAreaChange)
+            Text(text = stringResource(distretto.labelRes), style = MaterialTheme.typography.titleMedium)
+            ParametroSlider(stringResource(R.string.param_eritema), valori.eritema, 0..4, onEritemaChange)
+            ParametroSlider(stringResource(R.string.pasi_param_indurimento), valori.indurimento, 0..4, onIndurimentoChange)
+            ParametroSlider(stringResource(R.string.pasi_param_desquamazione), valori.desquamazione, 0..4, onDesquamazioneChange)
+            ParametroSlider(stringResource(R.string.param_area), valori.area, 0..6, onAreaChange)
         }
     }
 }
