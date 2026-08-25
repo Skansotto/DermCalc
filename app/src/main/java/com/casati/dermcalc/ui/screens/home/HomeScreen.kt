@@ -26,6 +26,7 @@ fun HomeScreen(
     onNavigateToBsa: () -> Unit,
     onNavigateToPasi: () -> Unit,
     onNavigateToEasi: () -> Unit,
+    onNavigateToPazienti: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -51,6 +52,9 @@ fun HomeScreen(
             Button(onClick = onNavigateToEasi, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.titolo_easi))
             }
+            Button(onClick = onNavigateToPazienti, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.titolo_pazienti))
+            }
         }
     }
 }
@@ -63,7 +67,8 @@ private fun HomeScreenPreview() {
             onNavigateToBmi = {},
             onNavigateToBsa = {},
             onNavigateToPasi = {},
-            onNavigateToEasi = {}
+            onNavigateToEasi = {},
+            onNavigateToPazienti = {}
         )
     }
 }

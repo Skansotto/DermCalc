@@ -10,6 +10,7 @@ import com.casati.dermcalc.ui.screens.bsa.BsaScreen
 import com.casati.dermcalc.ui.screens.easi.EasiScreen
 import com.casati.dermcalc.ui.screens.home.HomeScreen
 import com.casati.dermcalc.ui.screens.pasi.PasiScreen
+import com.casati.dermcalc.ui.screens.pazienti.PazienteListScreen
 
 @Composable
 fun DermCalcNavHost(navController: NavHostController = rememberNavController()) {
@@ -19,12 +20,14 @@ fun DermCalcNavHost(navController: NavHostController = rememberNavController()) 
                 onNavigateToBmi = { navController.navigate(Screen.Bmi.route) },
                 onNavigateToBsa = { navController.navigate(Screen.Bsa.route) },
                 onNavigateToPasi = { navController.navigate(Screen.Pasi.route) },
-                onNavigateToEasi = { navController.navigate(Screen.Easi.route) }
+                onNavigateToEasi = { navController.navigate(Screen.Easi.route) },
+                onNavigateToPazienti = { navController.navigate(Screen.Pazienti.route) }
             )
         }
         composable(Screen.Bmi.route) { BmiScreen() }
         composable(Screen.Bsa.route) { BsaScreen() }
         composable(Screen.Pasi.route) { PasiScreen() }
         composable(Screen.Easi.route) { EasiScreen() }
+        composable(Screen.Pazienti.route) { PazienteListScreen() }
     }
 }

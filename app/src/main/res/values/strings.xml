@@ -6,16 +6,29 @@
     <string name="titolo_bsa">BSA</string>
     <string name="titolo_pasi">PASI</string>
     <string name="titolo_easi">EASI</string>
+    <string name="titolo_pazienti">Pazienti</string>
 
     <!-- Azioni comuni -->
     <string name="azione_calcola">Calcola</string>
     <string name="azione_pulisci">Pulisci</string>
     <string name="azione_conferma">Conferma</string>
     <string name="azione_annulla">Annulla</string>
+    <string name="azione_aggiungi">Aggiungi</string>
+    <string name="azione_elimina">Elimina</string>
 
     <!-- Dialog di conferma pulizia dati -->
     <string name="dialog_pulisci_titolo">Pulisci i dati</string>
     <string name="dialog_pulisci_messaggio">Vuoi cancellare tutti i valori inseriti in questa schermata?</string>
+
+    <!-- Schermata Pazienti -->
+    <string name="pazienti_vuoto">Nessun paziente registrato. Tocca + per aggiungerne uno.</string>
+    <string name="pazienti_nome_label">Nome</string>
+    <string name="pazienti_data_nascita_label">Data di nascita</string>
+    <string name="pazienti_data_non_selezionata">Nessuna data selezionata</string>
+    <string name="pazienti_seleziona_data">Seleziona data</string>
+    <string name="pazienti_dialog_aggiungi_titolo">Nuovo paziente</string>
+    <string name="pazienti_dialog_elimina_titolo">Elimina paziente</string>
+    <string name="pazienti_dialog_elimina_messaggio">Vuoi eliminare %1$s? L\'operazione non può essere annullata.</string>
 
     <!-- Snackbar -->
     <string name="messaggio_calcolo_completato">Calcolo completato.</string>
