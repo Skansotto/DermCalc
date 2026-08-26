@@ -1,17 +1,23 @@
 package com.casati.dermcalc.ui.screens.bsa
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.casati.dermcalc.data.local.TipoCalcolo
+import com.casati.dermcalc.data.repository.MisurazioneRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class BsaUiState(
-    val regioniSelezionate: Set<BsaRegion> = emptySet()
+    val regioniSelezionate: Set<BsaRegion> = emptySet(),
+    val pazienteSelezionatoId: Long? = null
 ) {
     val totale: Int get() = regioniSelezionate.sumOf { it.percentuale }
 }
 
-class BsaViewModel : ViewModel() {
+class BsaViewModel(private val misurazioneRepository: MisurazioneRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BsaUiState())
     val uiState: StateFlow<BsaUiState> = _uiState
@@ -27,7 +33,27 @@ class BsaViewModel : ViewModel() {
         }
     }
 
+    fun onPazienteSelezionatoChange(pazienteId: Long?) {
+        _uiState.update { it.copy(pazienteSelezionatoId = pazienteId) }
+    }
+
+    fun onSalvaClick() {
+        val stato = _uiState.value
+        val pazienteId = stato.pazienteSelezionatoId ?: return
+        if (stato.regioniSelezionate.isEmpty()) return
+        viewModelScope.launch {
+            misurazioneRepository.salvaMisurazione(pazienteId, TipoCalcolo.BSA, stato.totale.toDouble())
+        }
+    }
+
     fun reset() {
         _uiState.update { BsaUiState() }
+    }
+
+    class Factory(private val misurazioneRepository: MisurazioneRepository) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return BsaViewModel(misurazioneRepository) as T
+        }
     }
 }

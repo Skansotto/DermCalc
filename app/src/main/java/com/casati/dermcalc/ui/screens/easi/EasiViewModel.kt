@@ -1,17 +1,23 @@
 package com.casati.dermcalc.ui.screens.easi
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.casati.dermcalc.data.local.TipoCalcolo
+import com.casati.dermcalc.data.repository.MisurazioneRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class EasiUiState(
     val valori: Map<EasiDistretto, EasiDistrettoValori> =
         EasiDistretto.entries.associateWith { EasiDistrettoValori() },
-    val risultato: Double? = null
+    val risultato: Double? = null,
+    val pazienteSelezionatoId: Long? = null
 )
 
-class EasiViewModel : ViewModel() {
+class EasiViewModel(private val misurazioneRepository: MisurazioneRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EasiUiState())
     val uiState: StateFlow<EasiUiState> = _uiState
@@ -36,6 +42,10 @@ class EasiViewModel : ViewModel() {
         aggiornaDistretto(distretto) { it.copy(area = valore.coerceIn(0, 6)) }
     }
 
+    fun onPazienteSelezionatoChange(pazienteId: Long?) {
+        _uiState.update { it.copy(pazienteSelezionatoId = pazienteId) }
+    }
+
     fun onCalcolaClick() {
         val punteggio = _uiState.value.valori.entries.sumOf { (distretto, valori) ->
             distretto.peso *
@@ -43,10 +53,18 @@ class EasiViewModel : ViewModel() {
                 valori.area
         }
         _uiState.update { it.copy(risultato = punteggio) }
+        salvaSeNecessario(punteggio)
     }
 
     fun reset() {
         _uiState.update { EasiUiState() }
+    }
+
+    private fun salvaSeNecessario(risultato: Double) {
+        val pazienteId = _uiState.value.pazienteSelezionatoId ?: return
+        viewModelScope.launch {
+            misurazioneRepository.salvaMisurazione(pazienteId, TipoCalcolo.EASI, risultato)
+        }
     }
 
     private fun aggiornaDistretto(
@@ -57,6 +75,13 @@ class EasiViewModel : ViewModel() {
             val valoriAggiornati = stato.valori.toMutableMap()
             valoriAggiornati[distretto] = trasformazione(valoriAggiornati.getValue(distretto))
             stato.copy(valori = valoriAggiornati, risultato = null)
+        }
+    }
+
+    class Factory(private val misurazioneRepository: MisurazioneRepository) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return EasiViewModel(misurazioneRepository) as T
         }
     }
 }
