@@ -40,13 +40,11 @@ import com.casati.dermcalc.DermCalcApplication
 import com.casati.dermcalc.R
 import com.casati.dermcalc.data.local.PazienteEntity
 import com.casati.dermcalc.ui.components.ConfermaDialog
-import java.text.DateFormat
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PazienteListScreen(
+    onPazienteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PazienteViewModel = viewModel(
         factory = PazienteViewModel.Factory(
@@ -91,6 +89,7 @@ fun PazienteListScreen(
                 items(pazienti, key = { it.id }) { paziente ->
                     PazienteRiga(
                         paziente = paziente,
+                        onClick = { onPazienteClick(paziente.id) },
                         onEliminaClick = { pazienteDaEliminare = paziente }
                     )
                 }
@@ -124,9 +123,13 @@ fun PazienteListScreen(
 @Composable
 private fun PazienteRiga(
     paziente: PazienteEntity,
+    onClick: () -> Unit,
     onEliminaClick: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -212,9 +215,4 @@ private fun AggiungiPazienteDialog(
             DatePicker(state = datePickerState)
         }
     }
-}
-
-private fun formattaData(millis: Long): String {
-    val formato = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-    return formato.format(Date(millis))
 }

@@ -7,6 +7,7 @@
     <string name="titolo_pasi">PASI</string>
     <string name="titolo_easi">EASI</string>
     <string name="titolo_pazienti">Pazienti</string>
+    <string name="titolo_dettaglio_paziente">Dettaglio paziente</string>
 
     <!-- Azioni comuni -->
     <string name="azione_calcola">Calcola</string>
@@ -29,6 +30,11 @@
     <string name="pazienti_dialog_aggiungi_titolo">Nuovo paziente</string>
     <string name="pazienti_dialog_elimina_titolo">Elimina paziente</string>
     <string name="pazienti_dialog_elimina_messaggio">Vuoi eliminare %1$s? L\'operazione non può essere annullata.</string>
+    <string name="pazienti_data_nascita_formato">Data di nascita: %1$s</string>
+
+    <!-- Schermata Dettaglio Paziente -->
+    <string name="dettaglio_storico_titolo">Storico misurazioni</string>
+    <string name="dettaglio_storico_vuoto">Nessuna misurazione registrata per questo paziente.</string>
 
     <!-- Snackbar -->
     <string name="messaggio_calcolo_completato">Calcolo completato.</string>
