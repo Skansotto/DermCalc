@@ -35,6 +35,9 @@
     <!-- Schermata Dettaglio Paziente -->
     <string name="dettaglio_storico_titolo">Storico misurazioni</string>
     <string name="dettaglio_storico_vuoto">Nessuna misurazione registrata per questo paziente.</string>
+    <string name="storico_voce_risultato_formato">%1$s: %2$.2f</string>
+    <string name="storico_voce_data_formato">Misurato il %1$s</string>
+    <string name="storico_differenza_formato">%1$+.1f rispetto al %2$s</string>
 
     <!-- Snackbar -->
     <string name="messaggio_calcolo_completato">Calcolo completato.</string>
