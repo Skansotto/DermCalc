@@ -9,6 +9,19 @@
     <string name="titolo_pazienti">Pazienti</string>
     <string name="titolo_dettaglio_paziente">Dettaglio paziente</string>
 
+    <!-- Autenticazione locale -->
+    <string name="titolo_crea_pin">Crea un PIN</string>
+    <string name="titolo_sblocco">Sblocca DermCalc</string>
+    <string name="auth_descrizione_crea_pin">Imposta un PIN per proteggere i dati dei tuoi pazienti.</string>
+    <string name="auth_pin_label">PIN</string>
+    <string name="auth_conferma_pin_label">Conferma PIN</string>
+    <string name="auth_azione_crea_pin">Crea PIN</string>
+    <string name="auth_azione_sblocca">Sblocca</string>
+    <string name="auth_azione_biometria">Usa impronta o Face ID</string>
+    <string name="auth_biometria_titolo">Sblocca DermCalc</string>
+    <string name="auth_biometria_sottotitolo">Usa l\'impronta digitale o il riconoscimento del volto</string>
+    <string name="auth_biometria_annulla">Usa il PIN</string>
+
     <!-- Azioni comuni -->
     <string name="azione_calcola">Calcola</string>
     <string name="azione_pulisci">Pulisci</string>
