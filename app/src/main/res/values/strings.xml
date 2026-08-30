@@ -42,6 +42,17 @@
     <string name="azione_annulla">Annulla</string>
     <string name="azione_aggiungi">Aggiungi</string>
     <string name="azione_elimina">Elimina</string>
+    <string name="azione_chiudi">Chiudi</string>
+
+    <!-- Guide contestuali sui parametri clinici -->
+    <string name="icona_info">ⓘ</string>
+    <string name="spiegazione_eritema">Intensità del rossore della cute nella zona interessata, da assente a molto intenso.</string>
+    <string name="spiegazione_area">Percentuale di superficie del distretto corporeo interessata dalla lesione: 0 (nessuna), 1 (&lt;10%%), 2 (10-29%%), 3 (30-49%%), 4 (50-69%%), 5 (70-89%%), 6 (90-100%%).</string>
+    <string name="spiegazione_pasi_indurimento">Spessore e consistenza della placca cutanea: quanto la pelle risulta ispessita al tatto.</string>
+    <string name="spiegazione_pasi_desquamazione">Quantità di squame visibili sulla superficie della lesione.</string>
+    <string name="spiegazione_easi_edema_papulazione">Presenza di gonfiore o di piccoli rilievi (papule) nella cute interessata.</string>
+    <string name="spiegazione_easi_escoriazioni">Segni lasciati sulla pelle dal grattamento causato dal prurito.</string>
+    <string name="spiegazione_easi_lichenificazione">Ispessimento della pelle con accentuazione delle pieghe cutanee, dovuto a grattamento cronico.</string>
 
     <!-- Dialog di conferma pulizia dati -->
     <string name="dialog_pulisci_titolo">Pulisci i dati</string>

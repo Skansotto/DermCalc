@@ -145,10 +145,34 @@ private fun DistrettoCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = stringResource(distretto.labelRes), style = MaterialTheme.typography.titleMedium)
-            ParametroSlider(stringResource(R.string.param_eritema), valori.eritema, 0..4, onEritemaChange)
-            ParametroSlider(stringResource(R.string.pasi_param_indurimento), valori.indurimento, 0..4, onIndurimentoChange)
-            ParametroSlider(stringResource(R.string.pasi_param_desquamazione), valori.desquamazione, 0..4, onDesquamazioneChange)
-            ParametroSlider(stringResource(R.string.param_area), valori.area, 0..6, onAreaChange)
+            ParametroSlider(
+                stringResource(R.string.param_eritema),
+                valori.eritema,
+                0..4,
+                onEritemaChange,
+                spiegazione = stringResource(R.string.spiegazione_eritema)
+            )
+            ParametroSlider(
+                stringResource(R.string.pasi_param_indurimento),
+                valori.indurimento,
+                0..4,
+                onIndurimentoChange,
+                spiegazione = stringResource(R.string.spiegazione_pasi_indurimento)
+            )
+            ParametroSlider(
+                stringResource(R.string.pasi_param_desquamazione),
+                valori.desquamazione,
+                0..4,
+                onDesquamazioneChange,
+                spiegazione = stringResource(R.string.spiegazione_pasi_desquamazione)
+            )
+            ParametroSlider(
+                stringResource(R.string.param_area),
+                valori.area,
+                0..6,
+                onAreaChange,
+                spiegazione = stringResource(R.string.spiegazione_area)
+            )
         }
     }
 }

@@ -141,11 +141,41 @@ private fun DistrettoCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = stringResource(distretto.labelRes), style = MaterialTheme.typography.titleMedium)
-            ParametroSlider(stringResource(R.string.param_eritema), valori.eritema, 0..3, onEritemaChange)
-            ParametroSlider(stringResource(R.string.easi_param_edema_papulazione), valori.edemaPapulazione, 0..3, onEdemaPapulazioneChange)
-            ParametroSlider(stringResource(R.string.easi_param_escoriazioni), valori.escoriazioni, 0..3, onEscoriazioniChange)
-            ParametroSlider(stringResource(R.string.easi_param_lichenificazione), valori.lichenificazione, 0..3, onLichenificazioneChange)
-            ParametroSlider(stringResource(R.string.param_area), valori.area, 0..6, onAreaChange)
+            ParametroSlider(
+                stringResource(R.string.param_eritema),
+                valori.eritema,
+                0..3,
+                onEritemaChange,
+                spiegazione = stringResource(R.string.spiegazione_eritema)
+            )
+            ParametroSlider(
+                stringResource(R.string.easi_param_edema_papulazione),
+                valori.edemaPapulazione,
+                0..3,
+                onEdemaPapulazioneChange,
+                spiegazione = stringResource(R.string.spiegazione_easi_edema_papulazione)
+            )
+            ParametroSlider(
+                stringResource(R.string.easi_param_escoriazioni),
+                valori.escoriazioni,
+                0..3,
+                onEscoriazioniChange,
+                spiegazione = stringResource(R.string.spiegazione_easi_escoriazioni)
+            )
+            ParametroSlider(
+                stringResource(R.string.easi_param_lichenificazione),
+                valori.lichenificazione,
+                0..3,
+                onLichenificazioneChange,
+                spiegazione = stringResource(R.string.spiegazione_easi_lichenificazione)
+            )
+            ParametroSlider(
+                stringResource(R.string.param_area),
+                valori.area,
+                0..6,
+                onAreaChange,
+                spiegazione = stringResource(R.string.spiegazione_area)
+            )
         }
     }
 }
