@@ -9,6 +9,19 @@
     <string name="titolo_pazienti">Pazienti</string>
     <string name="titolo_dettaglio_paziente">Dettaglio paziente</string>
 
+    <!-- Onboarding iniziale -->
+    <string name="onboarding_pagina1_titolo">Benvenuto in DermCalc</string>
+    <string name="onboarding_pagina1_descrizione">Le calcolatrici cliniche per la dermatologia, sempre a portata di mano.</string>
+    <string name="onboarding_pagina2_titolo">BMI e BSA</string>
+    <string name="onboarding_pagina2_descrizione">Calcola rapidamente indice di massa corporea e superficie corporea coinvolta.</string>
+    <string name="onboarding_pagina3_titolo">PASI ed EASI</string>
+    <string name="onboarding_pagina3_descrizione">Valuta la gravità di psoriasi e dermatite atopica con i punteggi clinici standard.</string>
+    <string name="onboarding_pagina4_titolo">Pazienti e storico</string>
+    <string name="onboarding_pagina4_descrizione">Collega le misurazioni a un paziente e consulta l\'andamento nel tempo.</string>
+    <string name="onboarding_azione_avanti">Avanti</string>
+    <string name="onboarding_azione_inizia">Inizia</string>
+    <string name="onboarding_azione_salta">Salta</string>
+
     <!-- Autenticazione locale -->
     <string name="titolo_crea_pin">Crea un PIN</string>
     <string name="titolo_sblocco">Sblocca DermCalc</string>

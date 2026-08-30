@@ -2,6 +2,7 @@ package com.casati.dermcalc
 
 import android.app.Application
 import com.casati.dermcalc.data.local.DermCalcDatabase
+import com.casati.dermcalc.data.local.OnboardingManager
 import com.casati.dermcalc.data.local.PinManager
 import com.casati.dermcalc.data.repository.MisurazioneRepository
 import com.casati.dermcalc.data.repository.PazienteRepository
@@ -12,4 +13,5 @@ class DermCalcApplication : Application() {
     val pazienteRepository by lazy { PazienteRepository(database.pazienteDao()) }
     val misurazioneRepository by lazy { MisurazioneRepository(database.misurazioneDao()) }
     val pinManager by lazy { PinManager(this) }
+    val onboardingManager by lazy { OnboardingManager(this) }
 }
