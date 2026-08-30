@@ -18,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +31,6 @@ import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.components.SelettorePaziente
 import com.casati.dermcalc.ui.screens.pazienti.PazienteViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun BsaScreen(
@@ -51,10 +49,7 @@ fun BsaScreen(
     val uiState by viewModel.uiState.collectAsState()
     val pazienti by pazienteViewModel.pazienti.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
-
-    val messaggioMisurazioneSalvata = stringResource(R.string.messaggio_misurazione_salvata)
 
     CalcolatoreScaffold(
         titolo = stringResource(R.string.titolo_bsa),
@@ -111,14 +106,19 @@ fun BsaScreen(
                 )
             }
             Button(
-                onClick = {
-                    viewModel.onSalvaClick()
-                    scope.launch { snackbarHostState.showSnackbar(messaggioMisurazioneSalvata) }
-                },
+                onClick = { viewModel.onSalvaClick() },
                 enabled = uiState.pazienteSelezionatoId != null && uiState.regioniSelezionate.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.bsa_azione_salva))
+            }
+            if (uiState.salvataggioConfermato) {
+                val nomePaziente = pazienti.find { it.id == uiState.pazienteSelezionatoId }?.nome.orEmpty()
+                Text(
+                    text = stringResource(R.string.messaggio_salvata_paziente_formato, nomePaziente),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

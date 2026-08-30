@@ -54,6 +54,13 @@
     <string name="spiegazione_easi_escoriazioni">Segni lasciati sulla pelle dal grattamento causato dal prurito.</string>
     <string name="spiegazione_easi_lichenificazione">Ispessimento della pelle con accentuazione delle pieghe cutanee, dovuto a grattamento cronico.</string>
 
+    <!-- Spiegazione del calcolo (PASI/EASI) -->
+    <string name="azione_dettaglio_calcolo">Come viene calcolato?</string>
+    <string name="dettaglio_calcolo_titolo">Come viene calcolato</string>
+    <string name="dettaglio_calcolo_formula_generale">Per ogni distretto: (somma dei parametri) × area × peso del distretto.</string>
+    <string name="dettaglio_calcolo_formula_voce">(%1$d) × %2$d × %3$.1f = %4$.2f</string>
+    <string name="dettaglio_calcolo_totale_formato">Totale: %1$.2f</string>
+
     <!-- Dialog di conferma pulizia dati -->
     <string name="dialog_pulisci_titolo">Pulisci i dati</string>
     <string name="dialog_pulisci_messaggio">Vuoi cancellare tutti i valori inseriti in questa schermata?</string>
@@ -76,14 +83,11 @@
     <string name="storico_voce_data_formato">Misurato il %1$s</string>
     <string name="storico_differenza_formato">%1$+.1f rispetto al %2$s</string>
 
-    <!-- Snackbar -->
-    <string name="messaggio_calcolo_completato">Calcolo completato.</string>
-    <string name="messaggio_misurazione_salvata">Misurazione salvata per il paziente selezionato.</string>
-
     <!-- Selettore paziente (BMI/BSA/PASI/EASI) -->
     <string name="selettore_paziente_label">Paziente</string>
     <string name="selettore_paziente_anonimo">Misurazione anonima</string>
     <string name="bsa_azione_salva">Salva misurazione</string>
+    <string name="messaggio_salvata_paziente_formato">✓ Misurazione salvata per %1$s.</string>
 
     <!-- Componente ParametroSlider -->
     <string name="formato_parametro_slider">%1$s: %2$d</string>

@@ -12,13 +12,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,10 +29,11 @@ import com.casati.dermcalc.DermCalcApplication
 import com.casati.dermcalc.R
 import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
+import com.casati.dermcalc.ui.components.DettaglioCalcoloDialog
 import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.components.SelettorePaziente
+import com.casati.dermcalc.ui.components.VoceDettaglioCalcolo
 import com.casati.dermcalc.ui.screens.pazienti.PazienteViewModel
-import kotlinx.coroutines.launch
 
 private val DISTRETTI_VISIBILI = PasiDistretto.entries
 
@@ -52,10 +54,8 @@ fun PasiScreen(
     val uiState by viewModel.uiState.collectAsState()
     val pazienti by pazienteViewModel.pazienti.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
-    val messaggioCalcoloCompletato = stringResource(R.string.messaggio_calcolo_completato)
-    val messaggioMisurazioneSalvata = stringResource(R.string.messaggio_misurazione_salvata)
+    var mostraDettaglioCalcolo by remember { mutableStateOf(false) }
 
     CalcolatoreScaffold(
         titolo = stringResource(R.string.titolo_pasi),
@@ -92,31 +92,64 @@ fun PasiScreen(
                 }
             }
             Button(
-                onClick = {
-                    viewModel.onCalcolaClick()
-                    val messaggio = if (viewModel.uiState.value.pazienteSelezionatoId != null) {
-                        messaggioMisurazioneSalvata
-                    } else {
-                        messaggioCalcoloCompletato
-                    }
-                    scope.launch { snackbarHostState.showSnackbar(messaggio) }
-                },
+                onClick = { viewModel.onCalcolaClick() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.azione_calcola))
             }
             val risultato = uiState.risultato
             if (risultato != null) {
-                Text(
-                    text = stringResource(
-                        R.string.pasi_risultato_formato,
-                        risultato,
-                        uiState.interpretazione.orEmpty()
-                    ),
-                    style = MaterialTheme.typography.headlineSmall
-                )
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.pasi_risultato_formato,
+                                risultato,
+                                uiState.interpretazione.orEmpty()
+                            ),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        val pazienteSelezionato = pazienti.find { it.id == uiState.pazienteSelezionatoId }
+                        if (pazienteSelezionato != null) {
+                            Text(
+                                text = stringResource(
+                                    R.string.messaggio_salvata_paziente_formato,
+                                    pazienteSelezionato.nome
+                                ),
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                        TextButton(
+                            onClick = { mostraDettaglioCalcolo = true },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Text(stringResource(R.string.azione_dettaglio_calcolo))
+                        }
+                    }
+                }
             }
         }
+    }
+
+    if (mostraDettaglioCalcolo) {
+        val voci = uiState.dettaglioCalcolo.map { dettaglio ->
+            VoceDettaglioCalcolo(
+                etichetta = stringResource(dettaglio.distretto.labelRes),
+                sommaParametri = dettaglio.sommaParametri,
+                area = dettaglio.area,
+                peso = dettaglio.distretto.peso,
+                subtotale = dettaglio.subtotale
+            )
+        }
+        DettaglioCalcoloDialog(
+            voci = voci,
+            totale = uiState.risultato ?: 0.0,
+            onChiudi = { mostraDettaglioCalcolo = false }
+        )
     }
 
     if (mostraDialogPulisci) {

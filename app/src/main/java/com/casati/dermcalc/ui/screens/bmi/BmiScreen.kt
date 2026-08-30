@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
@@ -52,9 +53,6 @@ fun BmiScreen(
     val scope = rememberCoroutineScope()
     var mostraDialogPulisci by remember { mutableStateOf(false) }
 
-    val messaggioCalcoloCompletato = stringResource(R.string.messaggio_calcolo_completato)
-    val messaggioMisurazioneSalvata = stringResource(R.string.messaggio_misurazione_salvata)
-
     CalcolatoreScaffold(
         titolo = stringResource(R.string.titolo_bmi),
         snackbarHostState = snackbarHostState,
@@ -92,23 +90,38 @@ fun BmiScreen(
             Button(
                 onClick = {
                     viewModel.onCalcolaClick()
-                    val statoAggiornato = viewModel.uiState.value
-                    val messaggio = when {
-                        statoAggiornato.messaggioErrore != null -> statoAggiornato.messaggioErrore
-                        statoAggiornato.pazienteSelezionatoId != null -> messaggioMisurazioneSalvata
-                        else -> messaggioCalcoloCompletato
+                    val errore = viewModel.uiState.value.messaggioErrore
+                    if (errore != null) {
+                        scope.launch { snackbarHostState.showSnackbar(errore) }
                     }
-                    scope.launch { snackbarHostState.showSnackbar(messaggio) }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.azione_calcola))
             }
             uiState.risultato?.let { risultato ->
-                Text(
-                    text = stringResource(R.string.bmi_risultato_formato, risultato),
-                    style = MaterialTheme.typography.headlineSmall
-                )
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.bmi_risultato_formato, risultato),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        val pazienteSelezionato = pazienti.find { it.id == uiState.pazienteSelezionatoId }
+                        if (pazienteSelezionato != null) {
+                            Text(
+                                text = stringResource(
+                                    R.string.messaggio_salvata_paziente_formato,
+                                    pazienteSelezionato.nome
+                                ),
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+                }
             }
         }
     }

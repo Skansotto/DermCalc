@@ -24,7 +24,26 @@ data class PasiUiState(
                 else -> "Severa"
             }
         }
+
+    // Contributo di ciascun distretto al punteggio finale: peso * (E+I+D) * area.
+    val dettaglioCalcolo: List<DettaglioDistrettoPasi>
+        get() = valori.entries.map { (distretto, v) ->
+            val sommaParametri = v.eritema + v.indurimento + v.desquamazione
+            DettaglioDistrettoPasi(
+                distretto = distretto,
+                sommaParametri = sommaParametri,
+                area = v.area,
+                subtotale = distretto.peso * sommaParametri * v.area
+            )
+        }
 }
+
+data class DettaglioDistrettoPasi(
+    val distretto: PasiDistretto,
+    val sommaParametri: Int,
+    val area: Int,
+    val subtotale: Double
+)
 
 class PasiViewModel(private val misurazioneRepository: MisurazioneRepository) : ViewModel() {
 

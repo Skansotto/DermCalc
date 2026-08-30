@@ -15,6 +15,25 @@ data class EasiUiState(
         EasiDistretto.entries.associateWith { EasiDistrettoValori() },
     val risultato: Double? = null,
     val pazienteSelezionatoId: Long? = null
+) {
+    // Contributo di ciascun distretto al punteggio finale: peso * (E+Edema+Escoriazioni+Lichenificazione) * area.
+    val dettaglioCalcolo: List<DettaglioDistrettoEasi>
+        get() = valori.entries.map { (distretto, v) ->
+            val sommaParametri = v.eritema + v.edemaPapulazione + v.escoriazioni + v.lichenificazione
+            DettaglioDistrettoEasi(
+                distretto = distretto,
+                sommaParametri = sommaParametri,
+                area = v.area,
+                subtotale = distretto.peso * sommaParametri * v.area
+            )
+        }
+}
+
+data class DettaglioDistrettoEasi(
+    val distretto: EasiDistretto,
+    val sommaParametri: Int,
+    val area: Int,
+    val subtotale: Double
 )
 
 class EasiViewModel(private val misurazioneRepository: MisurazioneRepository) : ViewModel() {
