@@ -43,7 +43,10 @@ fun DermCalcNavHost(navController: NavHostController = rememberNavController()) 
             arguments = listOf(navArgument(Screen.ARG_PAZIENTE_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             val pazienteId = backStackEntry.arguments?.getLong(Screen.ARG_PAZIENTE_ID) ?: 0L
-            PazienteDettaglioScreen(pazienteId = pazienteId)
+            PazienteDettaglioScreen(
+                pazienteId = pazienteId,
+                onPazienteEliminato = { navController.popBackStack() }
+            )
         }
     }
 }

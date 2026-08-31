@@ -11,6 +11,8 @@ class PazienteRepository(private val pazienteDao: PazienteDao) {
     suspend fun aggiungiPaziente(nome: String, dataNascita: Long): Long =
         pazienteDao.inserisci(PazienteEntity(nome = nome, dataNascita = dataNascita))
 
+    suspend fun aggiornaPaziente(paziente: PazienteEntity) = pazienteDao.aggiorna(paziente)
+
     suspend fun eliminaPaziente(paziente: PazienteEntity) = pazienteDao.elimina(paziente)
 
     suspend fun trovaPaziente(id: Long): PazienteEntity? = pazienteDao.trovaPerId(id)

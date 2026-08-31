@@ -23,6 +23,14 @@ class PazienteViewModel(private val repository: PazienteRepository) : ViewModel(
         }
     }
 
+    fun aggiornaPaziente(paziente: PazienteEntity, nome: String, dataNascita: Long) {
+        val nomePulito = nome.trim()
+        if (nomePulito.isEmpty()) return
+        viewModelScope.launch {
+            repository.aggiornaPaziente(paziente.copy(nome = nomePulito, dataNascita = dataNascita))
+        }
+    }
+
     fun eliminaPaziente(paziente: PazienteEntity) {
         viewModelScope.launch {
             repository.eliminaPaziente(paziente)

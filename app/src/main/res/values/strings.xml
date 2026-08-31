@@ -43,6 +43,8 @@
     <string name="azione_aggiungi">Aggiungi</string>
     <string name="azione_elimina">Elimina</string>
     <string name="azione_chiudi">Chiudi</string>
+    <string name="azione_modifica">Modifica</string>
+    <string name="azione_salva">Salva</string>
 
     <!-- Guide contestuali sui parametri clinici -->
     <string name="icona_info">ⓘ</string>
@@ -72,6 +74,7 @@
     <string name="pazienti_data_non_selezionata">Nessuna data selezionata</string>
     <string name="pazienti_seleziona_data">Seleziona data</string>
     <string name="pazienti_dialog_aggiungi_titolo">Nuovo paziente</string>
+    <string name="pazienti_dialog_modifica_titolo">Modifica paziente</string>
     <string name="pazienti_dialog_elimina_titolo">Elimina paziente</string>
     <string name="pazienti_dialog_elimina_messaggio">Vuoi eliminare %1$s? L\'operazione non può essere annullata.</string>
     <string name="pazienti_data_nascita_formato">Data di nascita: %1$s</string>
@@ -82,6 +85,8 @@
     <string name="storico_voce_risultato_formato">%1$s: %2$.2f</string>
     <string name="storico_voce_data_formato">Misurato il %1$s</string>
     <string name="storico_differenza_formato">%1$+.1f rispetto al %2$s</string>
+    <string name="misurazione_dialog_elimina_titolo">Elimina misurazione</string>
+    <string name="misurazione_dialog_elimina_messaggio">Vuoi eliminare questa misurazione %1$s del %2$s? L\'operazione non può essere annullata.</string>
 
     <!-- Selettore paziente (BMI/BSA/PASI/EASI) -->
     <string name="selettore_paziente_label">Paziente</string>

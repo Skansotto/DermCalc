@@ -20,4 +20,6 @@ class MisurazioneRepository(private val misurazioneDao: MisurazioneDao) {
             )
         )
     }
+
+    suspend fun eliminaMisurazione(misurazione: MisurazioneEntity) = misurazioneDao.elimina(misurazione)
 }

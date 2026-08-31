@@ -23,11 +23,14 @@ data class MisurazioneVoce(
 class PazienteDettaglioViewModel(
     private val pazienteId: Long,
     private val pazienteRepository: PazienteRepository,
-    misurazioneRepository: MisurazioneRepository
+    private val misurazioneRepository: MisurazioneRepository
 ) : ViewModel() {
 
     private val _paziente = MutableStateFlow<PazienteEntity?>(null)
     val paziente: StateFlow<PazienteEntity?> = _paziente
+
+    private val _pazienteEliminato = MutableStateFlow(false)
+    val pazienteEliminato: StateFlow<Boolean> = _pazienteEliminato
 
     val misurazioni: StateFlow<List<MisurazioneVoce>> = misurazioneRepository
         .osservaMisurazioni(pazienteId)
@@ -37,6 +40,31 @@ class PazienteDettaglioViewModel(
     init {
         viewModelScope.launch {
             _paziente.value = pazienteRepository.trovaPaziente(pazienteId)
+        }
+    }
+
+    fun aggiornaPaziente(nome: String, dataNascita: Long) {
+        val nomePulito = nome.trim()
+        if (nomePulito.isEmpty()) return
+        val attuale = _paziente.value ?: return
+        viewModelScope.launch {
+            val aggiornato = attuale.copy(nome = nomePulito, dataNascita = dataNascita)
+            pazienteRepository.aggiornaPaziente(aggiornato)
+            _paziente.value = aggiornato
+        }
+    }
+
+    fun eliminaPaziente() {
+        val attuale = _paziente.value ?: return
+        viewModelScope.launch {
+            pazienteRepository.eliminaPaziente(attuale)
+            _pazienteEliminato.value = true
+        }
+    }
+
+    fun eliminaMisurazione(misurazione: MisurazioneEntity) {
+        viewModelScope.launch {
+            misurazioneRepository.eliminaMisurazione(misurazione)
         }
     }
 

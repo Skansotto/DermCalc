@@ -54,6 +54,7 @@ fun PazienteListScreen(
 ) {
     val pazienti by viewModel.pazienti.collectAsState()
     var mostraDialogAggiungi by remember { mutableStateOf(false) }
+    var pazienteDaModificare by remember { mutableStateOf<PazienteEntity?>(null) }
     var pazienteDaEliminare by remember { mutableStateOf<PazienteEntity?>(null) }
 
     Scaffold(
@@ -90,6 +91,7 @@ fun PazienteListScreen(
                     PazienteRiga(
                         paziente = paziente,
                         onClick = { onPazienteClick(paziente.id) },
+                        onModificaClick = { pazienteDaModificare = paziente },
                         onEliminaClick = { pazienteDaEliminare = paziente }
                     )
                 }
@@ -98,12 +100,24 @@ fun PazienteListScreen(
     }
 
     if (mostraDialogAggiungi) {
-        AggiungiPazienteDialog(
+        PazienteFormDialog(
+            pazienteIniziale = null,
             onConferma = { nome, dataNascita ->
                 viewModel.aggiungiPaziente(nome, dataNascita)
                 mostraDialogAggiungi = false
             },
             onAnnulla = { mostraDialogAggiungi = false }
+        )
+    }
+
+    pazienteDaModificare?.let { paziente ->
+        PazienteFormDialog(
+            pazienteIniziale = paziente,
+            onConferma = { nome, dataNascita ->
+                viewModel.aggiornaPaziente(paziente, nome, dataNascita)
+                pazienteDaModificare = null
+            },
+            onAnnulla = { pazienteDaModificare = null }
         )
     }
 
@@ -124,6 +138,7 @@ fun PazienteListScreen(
 private fun PazienteRiga(
     paziente: PazienteEntity,
     onClick: () -> Unit,
+    onModificaClick: () -> Unit,
     onEliminaClick: () -> Unit
 ) {
     Card(
@@ -144,26 +159,44 @@ private fun PazienteRiga(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            TextButton(onClick = onEliminaClick) {
-                Text(stringResource(R.string.azione_elimina))
+            Row {
+                TextButton(onClick = onModificaClick) {
+                    Text(stringResource(R.string.azione_modifica))
+                }
+                TextButton(onClick = onEliminaClick) {
+                    Text(stringResource(R.string.azione_elimina))
+                }
             }
         }
     }
 }
 
+// Dialog condiviso per creare un nuovo paziente o modificarne uno esistente:
+// con pazienteIniziale nullo si comporta come form di creazione, altrimenti precompila i campi.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AggiungiPazienteDialog(
+internal fun PazienteFormDialog(
+    pazienteIniziale: PazienteEntity?,
     onConferma: (nome: String, dataNascita: Long) -> Unit,
     onAnnulla: () -> Unit
 ) {
-    var nome by remember { mutableStateOf("") }
+    var nome by remember { mutableStateOf(pazienteIniziale?.nome.orEmpty()) }
     var mostraDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = pazienteIniziale?.dataNascita)
 
     AlertDialog(
         onDismissRequest = onAnnulla,
-        title = { Text(stringResource(R.string.pazienti_dialog_aggiungi_titolo)) },
+        title = {
+            Text(
+                stringResource(
+                    if (pazienteIniziale == null) {
+                        R.string.pazienti_dialog_aggiungi_titolo
+                    } else {
+                        R.string.pazienti_dialog_modifica_titolo
+                    }
+                )
+            )
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
@@ -190,7 +223,11 @@ private fun AggiungiPazienteDialog(
                 onClick = { onConferma(nome, dataNascita ?: return@TextButton) },
                 enabled = nome.isNotBlank() && dataNascita != null
             ) {
-                Text(stringResource(R.string.azione_aggiungi))
+                Text(
+                    stringResource(
+                        if (pazienteIniziale == null) R.string.azione_aggiungi else R.string.azione_salva
+                    )
+                )
             }
         },
         dismissButton = {
