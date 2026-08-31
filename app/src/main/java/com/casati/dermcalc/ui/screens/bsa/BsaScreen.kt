@@ -31,6 +31,7 @@ import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.components.SelettorePaziente
 import com.casati.dermcalc.ui.screens.pazienti.PazienteViewModel
+import com.casati.dermcalc.ui.screens.pazienti.nomeCompleto
 
 @Composable
 fun BsaScreen(
@@ -113,7 +114,7 @@ fun BsaScreen(
                 Text(stringResource(R.string.bsa_azione_salva))
             }
             if (uiState.salvataggioConfermato) {
-                val nomePaziente = pazienti.find { it.id == uiState.pazienteSelezionatoId }?.nome.orEmpty()
+                val nomePaziente = pazienti.find { it.id == uiState.pazienteSelezionatoId }?.nomeCompleto.orEmpty()
                 Text(
                     text = stringResource(R.string.messaggio_salvata_paziente_formato, nomePaziente),
                     color = MaterialTheme.colorScheme.primary,

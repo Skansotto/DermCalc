@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.casati.dermcalc.R
 import com.casati.dermcalc.data.local.PazienteEntity
+import com.casati.dermcalc.ui.screens.pazienti.nomeCompleto
 
 // Selettore condiviso da tutte le calcolatrici per collegare una misurazione a un paziente,
 // oppure lasciarla anonima (nessun collegamento salvato nello storico).
@@ -31,7 +32,7 @@ fun SelettorePaziente(
 ) {
     var espanso by remember { mutableStateOf(false) }
     val etichettaAnonima = stringResource(R.string.selettore_paziente_anonimo)
-    val etichettaSelezionata = pazienti.find { it.id == pazienteSelezionatoId }?.nome ?: etichettaAnonima
+    val etichettaSelezionata = pazienti.find { it.id == pazienteSelezionatoId }?.nomeCompleto ?: etichettaAnonima
 
     ExposedDropdownMenuBox(
         expanded = espanso,
@@ -61,7 +62,7 @@ fun SelettorePaziente(
             )
             pazienti.forEach { paziente ->
                 DropdownMenuItem(
-                    text = { Text(paziente.nome) },
+                    text = { Text(paziente.nomeCompleto) },
                     onClick = {
                         onPazienteSelezionato(paziente.id)
                         espanso = false

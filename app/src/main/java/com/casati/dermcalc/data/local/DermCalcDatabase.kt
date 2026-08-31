@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [PazienteEntity::class, MisurazioneEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -27,7 +27,7 @@ abstract class DermCalcDatabase : RoomDatabase() {
                     context.applicationContext,
                     DermCalcDatabase::class.java,
                     "dermcalc.db"
-                ).build().also { istanza = it }
+                ).fallbackToDestructiveMigration(true).build().also { istanza = it }
             }
         }
     }

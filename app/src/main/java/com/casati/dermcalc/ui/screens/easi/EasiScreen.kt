@@ -34,6 +34,7 @@ import com.casati.dermcalc.ui.components.ParametroSlider
 import com.casati.dermcalc.ui.components.SelettorePaziente
 import com.casati.dermcalc.ui.components.VoceDettaglioCalcolo
 import com.casati.dermcalc.ui.screens.pazienti.PazienteViewModel
+import com.casati.dermcalc.ui.screens.pazienti.nomeCompleto
 
 @Composable
 fun EasiScreen(
@@ -112,7 +113,7 @@ fun EasiScreen(
                             Text(
                                 text = stringResource(
                                     R.string.messaggio_salvata_paziente_formato,
-                                    pazienteSelezionato.nome
+                                    pazienteSelezionato.nomeCompleto
                                 ),
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.bodySmall

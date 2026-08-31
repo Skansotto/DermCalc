@@ -19,7 +19,7 @@ interface PazienteDao {
     @Delete
     suspend fun elimina(paziente: PazienteEntity)
 
-    @Query("SELECT * FROM pazienti ORDER BY nome ASC")
+    @Query("SELECT * FROM pazienti ORDER BY cognome ASC, nome ASC")
     fun osservaTutti(): Flow<List<PazienteEntity>>
 
     @Query("SELECT * FROM pazienti WHERE id = :id")

@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -49,7 +51,10 @@ fun PazienteDettaglioScreen(
     )
 ) {
     val paziente by viewModel.paziente.collectAsState()
-    val misurazioni by viewModel.misurazioni.collectAsState()
+    val misurazioniFiltrate by viewModel.misurazioniFiltrate.collectAsState()
+    val filtroStorico by viewModel.filtroStorico.collectAsState()
+    val andamento by viewModel.andamento.collectAsState()
+    val serieGraficoSelezionata by viewModel.serieGraficoSelezionata.collectAsState()
     val pazienteEliminato by viewModel.pazienteEliminato.collectAsState()
     var mostraDialogModifica by remember { mutableStateOf(false) }
     var mostraDialogElimina by remember { mutableStateOf(false) }
@@ -79,12 +84,16 @@ fun PazienteDettaglioScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text(text = p.nome, style = MaterialTheme.typography.headlineSmall)
+                        Text(text = p.nomeCompleto, style = MaterialTheme.typography.headlineSmall)
                         Text(
                             text = stringResource(
                                 R.string.pazienti_data_nascita_formato,
                                 formattaData(p.dataNascita)
                             ),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = stringResource(R.string.pazienti_eta_formato, calcolaEta(p.dataNascita)),
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -100,17 +109,64 @@ fun PazienteDettaglioScreen(
             }
             HorizontalDivider()
             Text(
+                text = stringResource(R.string.andamento_titolo),
+                style = MaterialTheme.typography.titleMedium
+            )
+            if (andamento.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.andamento_vuoto),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(andamento, key = { it.tipo }) { serie ->
+                        FilterChip(
+                            selected = serie.tipo == serieGraficoSelezionata?.tipo,
+                            onClick = { viewModel.selezionaGraficoTipo(serie.tipo) },
+                            label = { Text(stringResource(serie.tipo.labelRes())) }
+                        )
+                    }
+                }
+                serieGraficoSelezionata?.let { serie ->
+                    AndamentoChart(
+                        serie = serie,
+                        colore = when (serie.tipo) {
+                            TipoCalcolo.PASI -> MaterialTheme.colorScheme.primary
+                            TipoCalcolo.EASI -> MaterialTheme.colorScheme.tertiary
+                            else -> MaterialTheme.colorScheme.secondary
+                        }
+                    )
+                }
+            }
+            HorizontalDivider()
+            Text(
                 text = stringResource(R.string.dettaglio_storico_titolo),
                 style = MaterialTheme.typography.titleMedium
             )
-            if (misurazioni.isEmpty()) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                item {
+                    FilterChip(
+                        selected = filtroStorico == null,
+                        onClick = { viewModel.impostaFiltroStorico(null) },
+                        label = { Text(stringResource(R.string.storico_filtro_tutti)) }
+                    )
+                }
+                items(TipoCalcolo.entries.toList()) { tipo ->
+                    FilterChip(
+                        selected = filtroStorico == tipo,
+                        onClick = { viewModel.impostaFiltroStorico(tipo) },
+                        label = { Text(stringResource(tipo.labelRes())) }
+                    )
+                }
+            }
+            if (misurazioniFiltrate.isEmpty()) {
                 Text(
                     text = stringResource(R.string.dettaglio_storico_vuoto),
                     style = MaterialTheme.typography.bodyMedium
                 )
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(misurazioni, key = { it.misurazione.id }) { voce ->
+                    items(misurazioniFiltrate, key = { it.misurazione.id }) { voce ->
                         MisurazioneRiga(
                             voce = voce,
                             onEliminaClick = { misurazioneDaEliminare = voce }
@@ -125,8 +181,8 @@ fun PazienteDettaglioScreen(
         paziente?.let { p ->
             PazienteFormDialog(
                 pazienteIniziale = p,
-                onConferma = { nome, dataNascita ->
-                    viewModel.aggiornaPaziente(nome, dataNascita)
+                onConferma = { nome, cognome, sesso, dataNascita ->
+                    viewModel.aggiornaPaziente(nome, cognome, sesso, dataNascita)
                     mostraDialogModifica = false
                 },
                 onAnnulla = { mostraDialogModifica = false }
@@ -138,7 +194,7 @@ fun PazienteDettaglioScreen(
         paziente?.let { p ->
             ConfermaDialog(
                 titolo = stringResource(R.string.pazienti_dialog_elimina_titolo),
-                messaggio = stringResource(R.string.pazienti_dialog_elimina_messaggio, p.nome),
+                messaggio = stringResource(R.string.pazienti_dialog_elimina_messaggio, p.nomeCompleto),
                 onConferma = {
                     viewModel.eliminaPaziente()
                     mostraDialogElimina = false

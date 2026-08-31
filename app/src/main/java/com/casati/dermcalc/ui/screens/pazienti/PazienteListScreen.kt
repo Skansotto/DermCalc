@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.casati.dermcalc.DermCalcApplication
 import com.casati.dermcalc.R
 import com.casati.dermcalc.data.local.PazienteEntity
+import com.casati.dermcalc.data.local.Sesso
 import com.casati.dermcalc.ui.components.ConfermaDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,8 +104,8 @@ fun PazienteListScreen(
     if (mostraDialogAggiungi) {
         PazienteFormDialog(
             pazienteIniziale = null,
-            onConferma = { nome, dataNascita ->
-                viewModel.aggiungiPaziente(nome, dataNascita)
+            onConferma = { nome, cognome, sesso, dataNascita ->
+                viewModel.aggiungiPaziente(nome, cognome, sesso, dataNascita)
                 mostraDialogAggiungi = false
             },
             onAnnulla = { mostraDialogAggiungi = false }
@@ -113,8 +115,8 @@ fun PazienteListScreen(
     pazienteDaModificare?.let { paziente ->
         PazienteFormDialog(
             pazienteIniziale = paziente,
-            onConferma = { nome, dataNascita ->
-                viewModel.aggiornaPaziente(paziente, nome, dataNascita)
+            onConferma = { nome, cognome, sesso, dataNascita ->
+                viewModel.aggiornaPaziente(paziente, nome, cognome, sesso, dataNascita)
                 pazienteDaModificare = null
             },
             onAnnulla = { pazienteDaModificare = null }
@@ -124,7 +126,7 @@ fun PazienteListScreen(
     pazienteDaEliminare?.let { paziente ->
         ConfermaDialog(
             titolo = stringResource(R.string.pazienti_dialog_elimina_titolo),
-            messaggio = stringResource(R.string.pazienti_dialog_elimina_messaggio, paziente.nome),
+            messaggio = stringResource(R.string.pazienti_dialog_elimina_messaggio, paziente.nomeCompleto),
             onConferma = {
                 viewModel.eliminaPaziente(paziente)
                 pazienteDaEliminare = null
@@ -153,9 +155,9 @@ private fun PazienteRiga(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(text = paziente.nome, style = MaterialTheme.typography.titleMedium)
+                Text(text = paziente.nomeCompleto, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = formattaData(paziente.dataNascita),
+                    text = stringResource(R.string.pazienti_eta_formato, calcolaEta(paziente.dataNascita)),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -177,10 +179,12 @@ private fun PazienteRiga(
 @Composable
 internal fun PazienteFormDialog(
     pazienteIniziale: PazienteEntity?,
-    onConferma: (nome: String, dataNascita: Long) -> Unit,
+    onConferma: (nome: String, cognome: String, sesso: Sesso, dataNascita: Long) -> Unit,
     onAnnulla: () -> Unit
 ) {
     var nome by remember { mutableStateOf(pazienteIniziale?.nome.orEmpty()) }
+    var cognome by remember { mutableStateOf(pazienteIniziale?.cognome.orEmpty()) }
+    var sesso by remember { mutableStateOf(pazienteIniziale?.sesso) }
     var mostraDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = pazienteIniziale?.dataNascita)
 
@@ -205,6 +209,28 @@ internal fun PazienteFormDialog(
                     label = { Text(stringResource(R.string.pazienti_nome_label)) },
                     modifier = Modifier.fillMaxWidth()
                 )
+                OutlinedTextField(
+                    value = cognome,
+                    onValueChange = { cognome = it },
+                    label = { Text(stringResource(R.string.pazienti_cognome_label)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = stringResource(R.string.pazienti_sesso_label),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = sesso == Sesso.MASCHIO,
+                        onClick = { sesso = Sesso.MASCHIO },
+                        label = { Text(stringResource(R.string.pazienti_sesso_maschio)) }
+                    )
+                    FilterChip(
+                        selected = sesso == Sesso.FEMMINA,
+                        onClick = { sesso = Sesso.FEMMINA },
+                        label = { Text(stringResource(R.string.pazienti_sesso_femmina)) }
+                    )
+                }
                 Text(
                     text = stringResource(R.string.pazienti_data_nascita_label),
                     style = MaterialTheme.typography.labelMedium
@@ -219,9 +245,12 @@ internal fun PazienteFormDialog(
         },
         confirmButton = {
             val dataNascita = datePickerState.selectedDateMillis
+            val sessoScelto = sesso
             TextButton(
-                onClick = { onConferma(nome, dataNascita ?: return@TextButton) },
-                enabled = nome.isNotBlank() && dataNascita != null
+                onClick = {
+                    onConferma(nome, cognome, sessoScelto ?: return@TextButton, dataNascita ?: return@TextButton)
+                },
+                enabled = nome.isNotBlank() && cognome.isNotBlank() && sessoScelto != null && dataNascita != null
             ) {
                 Text(
                     stringResource(

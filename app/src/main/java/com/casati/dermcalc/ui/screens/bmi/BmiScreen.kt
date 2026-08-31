@@ -31,6 +31,7 @@ import com.casati.dermcalc.ui.components.CalcolatoreScaffold
 import com.casati.dermcalc.ui.components.ConfermaPulisciDialog
 import com.casati.dermcalc.ui.components.SelettorePaziente
 import com.casati.dermcalc.ui.screens.pazienti.PazienteViewModel
+import com.casati.dermcalc.ui.screens.pazienti.nomeCompleto
 import kotlinx.coroutines.launch
 
 @Composable
@@ -114,7 +115,7 @@ fun BmiScreen(
                             Text(
                                 text = stringResource(
                                     R.string.messaggio_salvata_paziente_formato,
-                                    pazienteSelezionato.nome
+                                    pazienteSelezionato.nomeCompleto
                                 ),
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.bodySmall

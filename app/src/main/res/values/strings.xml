@@ -70,6 +70,10 @@
     <!-- Schermata Pazienti -->
     <string name="pazienti_vuoto">Nessun paziente registrato. Tocca + per aggiungerne uno.</string>
     <string name="pazienti_nome_label">Nome</string>
+    <string name="pazienti_cognome_label">Cognome</string>
+    <string name="pazienti_sesso_label">Sesso</string>
+    <string name="pazienti_sesso_maschio">Maschio</string>
+    <string name="pazienti_sesso_femmina">Femmina</string>
     <string name="pazienti_data_nascita_label">Data di nascita</string>
     <string name="pazienti_data_non_selezionata">Nessuna data selezionata</string>
     <string name="pazienti_seleziona_data">Seleziona data</string>
@@ -78,6 +82,7 @@
     <string name="pazienti_dialog_elimina_titolo">Elimina paziente</string>
     <string name="pazienti_dialog_elimina_messaggio">Vuoi eliminare %1$s? L\'operazione non può essere annullata.</string>
     <string name="pazienti_data_nascita_formato">Data di nascita: %1$s</string>
+    <string name="pazienti_eta_formato">Età: %1$d anni</string>
 
     <!-- Schermata Dettaglio Paziente -->
     <string name="dettaglio_storico_titolo">Storico misurazioni</string>
@@ -85,6 +90,9 @@
     <string name="storico_voce_risultato_formato">%1$s: %2$.2f</string>
     <string name="storico_voce_data_formato">Misurato il %1$s</string>
     <string name="storico_differenza_formato">%1$+.1f rispetto al %2$s</string>
+    <string name="andamento_titolo">Andamento nel tempo</string>
+    <string name="andamento_vuoto">Servono almeno due misurazioni dello stesso tipo per mostrare un grafico.</string>
+    <string name="storico_filtro_tutti">Tutti</string>
     <string name="misurazione_dialog_elimina_titolo">Elimina misurazione</string>
     <string name="misurazione_dialog_elimina_messaggio">Vuoi eliminare questa misurazione %1$s del %2$s? L\'operazione non può essere annullata.</string>
 

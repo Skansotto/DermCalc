@@ -9,4 +9,10 @@ class Converters {
 
     @TypeConverter
     fun aTipoCalcolo(valore: String): TipoCalcolo = TipoCalcolo.valueOf(valore)
+
+    @TypeConverter
+    fun daSesso(sesso: Sesso): String = sesso.name
+
+    @TypeConverter
+    fun aSesso(valore: String): Sesso = Sesso.valueOf(valore)
 }
