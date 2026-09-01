@@ -4,48 +4,115 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.casati.dermcalc.data.local.PazienteEntity
+import com.casati.dermcalc.data.local.SessioneCorrente
 import com.casati.dermcalc.data.local.Sesso
 import com.casati.dermcalc.data.repository.PazienteRepository
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class PazienteViewModel(private val repository: PazienteRepository) : ViewModel() {
+// Esito della validazione del form paziente: distingue i motivi dell'errore così
+// la schermata può mostrare un messaggio specifico invece di un generico "dati non validi".
+enum class EsitoSalvataggio { OK, NOME_MANCANTE, DATA_NON_VALIDA, DUPLICATO }
 
-    val pazienti: StateFlow<List<PazienteEntity>> = repository.osservaPazienti()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+class PazienteViewModel(
+    private val repository: PazienteRepository,
+    private val sessione: SessioneCorrente
+) : ViewModel() {
 
-    fun aggiungiPaziente(nome: String, cognome: String, sesso: Sesso, dataNascita: Long) {
-        val nomePulito = nome.trim()
-        val cognomePulito = cognome.trim()
-        if (nomePulito.isEmpty() || cognomePulito.isEmpty()) return
-        viewModelScope.launch {
-            repository.aggiungiPaziente(nomePulito, cognomePulito, sesso, dataNascita)
-        }
+    private val _ricerca = MutableStateFlow("")
+    val ricerca: StateFlow<String> = _ricerca
+
+    fun onRicercaChange(testo: String) {
+        _ricerca.value = testo
     }
 
-    fun aggiornaPaziente(paziente: PazienteEntity, nome: String, cognome: String, sesso: Sesso, dataNascita: Long) {
+    // Il nuovo paziente diventa subito quello attivo: chi lo registra sta per misurarlo.
+    fun aggiungiPaziente(
+        nome: String,
+        cognome: String,
+        sesso: Sesso,
+        dataNascita: Long?,
+        esistenti: List<PazienteEntity>,
+        onSalvato: (Long) -> Unit
+    ): EsitoSalvataggio {
         val nomePulito = nome.trim()
         val cognomePulito = cognome.trim()
-        if (nomePulito.isEmpty() || cognomePulito.isEmpty()) return
+        if (nomePulito.length < 2 || cognomePulito.length < 2) return EsitoSalvataggio.NOME_MANCANTE
+        if (dataNascita == null) return EsitoSalvataggio.DATA_NON_VALIDA
+        if (esisteGia(esistenti, nomePulito, cognomePulito, dataNascita, null)) {
+            return EsitoSalvataggio.DUPLICATO
+        }
+        viewModelScope.launch {
+            val id = repository.aggiungiPaziente(nomePulito, cognomePulito, sesso, dataNascita)
+            sessione.collega(id)
+            onSalvato(id)
+        }
+        return EsitoSalvataggio.OK
+    }
+
+    fun aggiornaPaziente(
+        paziente: PazienteEntity,
+        nome: String,
+        cognome: String,
+        sesso: Sesso,
+        dataNascita: Long?,
+        esistenti: List<PazienteEntity>,
+        onSalvato: () -> Unit
+    ): EsitoSalvataggio {
+        val nomePulito = nome.trim()
+        val cognomePulito = cognome.trim()
+        if (nomePulito.length < 2 || cognomePulito.length < 2) return EsitoSalvataggio.NOME_MANCANTE
+        if (dataNascita == null) return EsitoSalvataggio.DATA_NON_VALIDA
+        if (esisteGia(esistenti, nomePulito, cognomePulito, dataNascita, paziente.id)) {
+            return EsitoSalvataggio.DUPLICATO
+        }
         viewModelScope.launch {
             repository.aggiornaPaziente(
-                paziente.copy(nome = nomePulito, cognome = cognomePulito, sesso = sesso, dataNascita = dataNascita)
+                paziente.copy(
+                    nome = nomePulito,
+                    cognome = cognomePulito,
+                    sesso = sesso,
+                    dataNascita = dataNascita
+                )
             )
+            onSalvato()
         }
+        return EsitoSalvataggio.OK
     }
 
-    fun eliminaPaziente(paziente: PazienteEntity) {
+    fun eliminaPaziente(paziente: PazienteEntity, onEliminato: () -> Unit) {
         viewModelScope.launch {
             repository.eliminaPaziente(paziente)
+            sessione.scollegaSe(paziente.id)
+            onEliminato()
         }
     }
 
-    class Factory(private val repository: PazienteRepository) : ViewModelProvider.Factory {
+    fun collegaPaziente(pazienteId: Long?) {
+        sessione.collega(pazienteId)
+    }
+
+    private fun esisteGia(
+        esistenti: List<PazienteEntity>,
+        nome: String,
+        cognome: String,
+        dataNascita: Long,
+        idDaEscludere: Long?
+    ): Boolean = esistenti.any {
+        it.id != idDaEscludere &&
+            it.nome.equals(nome, ignoreCase = true) &&
+            it.cognome.equals(cognome, ignoreCase = true) &&
+            it.dataNascita == dataNascita
+    }
+
+    class Factory(
+        private val repository: PazienteRepository,
+        private val sessione: SessioneCorrente
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PazienteViewModel(repository) as T
+            return PazienteViewModel(repository, sessione) as T
         }
     }
 }

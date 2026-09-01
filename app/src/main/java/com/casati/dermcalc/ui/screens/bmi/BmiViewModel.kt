@@ -1,87 +1,118 @@
 package com.casati.dermcalc.ui.screens.bmi
 
+import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.casati.dermcalc.R
+import com.casati.dermcalc.data.local.SessioneCorrente
 import com.casati.dermcalc.data.local.TipoCalcolo
 import com.casati.dermcalc.data.repository.MisurazioneRepository
+import com.casati.dermcalc.ui.theme.Ambra
+import com.casati.dermcalc.ui.theme.AmbraTenue
+import com.casati.dermcalc.ui.theme.Indaco
+import com.casati.dermcalc.ui.theme.IndacoTenue
+import com.casati.dermcalc.ui.theme.Rosso
+import com.casati.dermcalc.ui.theme.RossoTenue
+import com.casati.dermcalc.ui.theme.Verde
+import com.casati.dermcalc.ui.theme.VerdeTenue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
+// Peso e altezza si regolano a passi invece che da tastiera: in visita si parte
+// sempre da un valore plausibile e si aggiusta di poco.
 data class BmiUiState(
-    val peso: String = "",
-    val altezza: String = "",
-    val risultato: Double? = null,
-    val messaggioErrore: String? = null,
-    val pazienteSelezionatoId: Long? = null
-)
+    val peso: Double = 74.0,
+    val altezzaCm: Int = 176
+) {
+    val valore: Double
+        get() {
+            val metri = altezzaCm / 100.0
+            return peso / (metri * metri)
+        }
 
-class BmiViewModel(private val misurazioneRepository: MisurazioneRepository) : ViewModel() {
+    val valoreArrotondato: Double get() = round(valore * 10) / 10
+
+    @get:StringRes
+    val categoriaRes: Int
+        get() = when {
+            valore < 18.5 -> R.string.bmi_categoria_sottopeso
+            valore < 25 -> R.string.bmi_categoria_normopeso
+            valore < 30 -> R.string.bmi_categoria_sovrappeso
+            else -> R.string.bmi_categoria_obesita
+        }
+
+    val colore: Color
+        get() = when {
+            valore < 18.5 -> Indaco
+            valore < 25 -> Verde
+            valore < 30 -> Ambra
+            else -> Rosso
+        }
+
+    val tinta: Color
+        get() = when {
+            valore < 18.5 -> IndacoTenue
+            valore < 25 -> VerdeTenue
+            valore < 30 -> AmbraTenue
+            else -> RossoTenue
+        }
+
+    // Posizione dell'indicatore sulla scala 15-40 mostrata sotto il punteggio.
+    val posizioneScala: Float
+        get() = (((valore - 15) / 25).coerceIn(0.0, 1.0)).toFloat()
+}
+
+class BmiViewModel(
+    private val misurazioneRepository: MisurazioneRepository,
+    private val sessione: SessioneCorrente
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BmiUiState())
     val uiState: StateFlow<BmiUiState> = _uiState
 
-    fun onPesoChange(value: String) {
-        _uiState.update { it.copy(peso = value, risultato = null, messaggioErrore = null) }
+    val pazienteCollegatoId: StateFlow<Long?> = sessione.pazienteCollegatoId
+
+    fun onPesoIncrementa() {
+        _uiState.update { it.copy(peso = (it.peso + 0.5).coerceAtMost(250.0)) }
     }
 
-    fun onAltezzaChange(value: String) {
-        _uiState.update { it.copy(altezza = value, risultato = null, messaggioErrore = null) }
+    fun onPesoDecrementa() {
+        _uiState.update { it.copy(peso = (it.peso - 0.5).coerceAtLeast(30.0)) }
     }
 
-    fun onPazienteSelezionatoChange(pazienteId: Long?) {
-        _uiState.update { it.copy(pazienteSelezionatoId = pazienteId) }
+    fun onAltezzaIncrementa() {
+        _uiState.update { it.copy(altezzaCm = (it.altezzaCm + 1).coerceAtMost(230)) }
     }
 
-    fun onCalcolaClick() {
-        val state = _uiState.value
-        val pesoInput = state.peso.trim()
-        val altezzaInput = state.altezza.trim()
-
-        if (pesoInput.isEmpty() || altezzaInput.isEmpty()) {
-            mostraErrore("Inserisci sia il peso che l'altezza.")
-            return
-        }
-
-        val peso = pesoInput.replace(',', '.').toDoubleOrNull()
-        val altezza = altezzaInput.replace(',', '.').toDoubleOrNull()
-
-        if (peso == null || altezza == null) {
-            mostraErrore("Inserisci valori numerici validi.")
-            return
-        }
-
-        if (peso <= 0 || altezza <= 0) {
-            mostraErrore("Peso e altezza devono essere maggiori di zero.")
-            return
-        }
-
-        val bmi = peso / (altezza * altezza)
-        _uiState.update { it.copy(risultato = bmi, messaggioErrore = null) }
-        salvaSeNecessario(bmi)
+    fun onAltezzaDecrementa() {
+        _uiState.update { it.copy(altezzaCm = (it.altezzaCm - 1).coerceAtLeast(120)) }
     }
 
-    fun reset() {
-        _uiState.update { BmiUiState() }
+    fun collegaPaziente(pazienteId: Long?) {
+        sessione.collega(pazienteId)
     }
 
-    private fun salvaSeNecessario(risultato: Double) {
-        val pazienteId = _uiState.value.pazienteSelezionatoId ?: return
+    fun salva(onSalvato: (Long, Double) -> Unit) {
+        val pazienteId = sessione.pazienteCollegatoId.value ?: return
+        val valore = _uiState.value.valoreArrotondato
         viewModelScope.launch {
-            misurazioneRepository.salvaMisurazione(pazienteId, TipoCalcolo.BMI, risultato)
+            misurazioneRepository.salvaMisurazione(pazienteId, TipoCalcolo.BMI, valore)
+            onSalvato(pazienteId, valore)
         }
     }
 
-    private fun mostraErrore(messaggio: String) {
-        _uiState.update { it.copy(risultato = null, messaggioErrore = messaggio) }
-    }
-
-    class Factory(private val misurazioneRepository: MisurazioneRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val misurazioneRepository: MisurazioneRepository,
+        private val sessione: SessioneCorrente
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BmiViewModel(misurazioneRepository) as T
+            return BmiViewModel(misurazioneRepository, sessione) as T
         }
     }
 }

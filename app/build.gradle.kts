@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.biometric)
+    // androidx.biometric 1.1.0 trascina fragment 1.2.5, che rifiuta i request code
+    // generati dal registro dei risultati di Compose: serve una versione recente.
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

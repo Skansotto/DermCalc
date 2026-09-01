@@ -10,7 +10,9 @@ class MisurazioneRepository(private val misurazioneDao: MisurazioneDao) {
     fun osservaMisurazioni(pazienteId: Long): Flow<List<MisurazioneEntity>> =
         misurazioneDao.osservaPerPaziente(pazienteId)
 
-    suspend fun salvaMisurazione(pazienteId: Long, tipo: TipoCalcolo, risultato: Double) {
+    fun osservaTutte(): Flow<List<MisurazioneEntity>> = misurazioneDao.osservaTutte()
+
+    suspend fun salvaMisurazione(pazienteId: Long, tipo: TipoCalcolo, risultato: Double): Long =
         misurazioneDao.inserisci(
             MisurazioneEntity(
                 pazienteId = pazienteId,
@@ -19,7 +21,13 @@ class MisurazioneRepository(private val misurazioneDao: MisurazioneDao) {
                 data = System.currentTimeMillis()
             )
         )
-    }
 
     suspend fun eliminaMisurazione(misurazione: MisurazioneEntity) = misurazioneDao.elimina(misurazione)
+
+    suspend fun leggiTutte(): List<MisurazioneEntity> = misurazioneDao.leggiTutte()
+
+    suspend fun inserisciTutte(misurazioni: List<MisurazioneEntity>) =
+        misurazioneDao.inserisciTutte(misurazioni)
+
+    suspend fun eliminaTutte() = misurazioneDao.eliminaTutte()
 }

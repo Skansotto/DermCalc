@@ -1,150 +1,279 @@
 <resources>
     <string name="app_name">DermCalc</string>
 
-    <!-- Titoli schermate calcolatrici (Home + TopBar) -->
+    <!-- Titoli e nomi degli indici -->
     <string name="titolo_bmi">BMI</string>
     <string name="titolo_bsa">BSA</string>
     <string name="titolo_pasi">PASI</string>
     <string name="titolo_easi">EASI</string>
     <string name="titolo_pazienti">Pazienti</string>
-    <string name="titolo_dettaglio_paziente">Dettaglio paziente</string>
+    <string name="titolo_impostazioni">Impostazioni</string>
+    <string name="titolo_scheda_paziente">Scheda paziente</string>
+    <string name="titolo_nuovo_paziente">Nuovo paziente</string>
+    <string name="titolo_modifica_paziente">Modifica paziente</string>
+    <string name="titolo_risultato_formato">Risultato %1$s</string>
+
+    <!-- Registrazione dell\'account locale -->
+    <string name="registrazione_titolo">Benvenuto in DermCalc</string>
+    <string name="registrazione_descrizione">L\'account è locale: i dati restano su questo dispositivo e non vengono inviati a nessun server. Servono solo i tuoi dati per firmare i referti.</string>
+    <string name="registrazione_titolo_modifica">Modifica profilo</string>
+    <string name="registrazione_nota_pin">Al passo successivo imposterai un PIN. Sarà l\'unico modo per accedere: i dati sanitari restano protetti sul dispositivo.</string>
+    <string name="registrazione_campo_nome">Nome</string>
+    <string name="registrazione_campo_cognome">Cognome</string>
+    <string name="registrazione_campo_struttura">Struttura</string>
+    <string name="registrazione_campo_facoltativo">facoltativo</string>
+    <string name="registrazione_segnaposto_nome">Mario</string>
+    <string name="registrazione_segnaposto_cognome">Rossi</string>
+    <string name="registrazione_segnaposto_struttura">Ambulatorio di Dermatologia</string>
+    <string name="registrazione_errore_nome">Inserisci nome e cognome (almeno 2 caratteri).</string>
+    <string name="registrazione_azione_continua">Continua</string>
+    <string name="registrazione_azione_salva">Salva profilo</string>
+    <string name="registrazione_profilo_aggiornato">Profilo aggiornato</string>
 
     <!-- Onboarding iniziale -->
-    <string name="onboarding_pagina1_titolo">Benvenuto in DermCalc</string>
-    <string name="onboarding_pagina1_descrizione">Le calcolatrici cliniche per la dermatologia, sempre a portata di mano.</string>
-    <string name="onboarding_pagina2_titolo">BMI e BSA</string>
-    <string name="onboarding_pagina2_descrizione">Calcola rapidamente indice di massa corporea e superficie corporea coinvolta.</string>
-    <string name="onboarding_pagina3_titolo">PASI ed EASI</string>
-    <string name="onboarding_pagina3_descrizione">Valuta la gravità di psoriasi e dermatite atopica con i punteggi clinici standard.</string>
-    <string name="onboarding_pagina4_titolo">Pazienti e storico</string>
-    <string name="onboarding_pagina4_descrizione">Collega le misurazioni a un paziente e consulta l\'andamento nel tempo.</string>
+    <string name="onboarding_pagina1_titolo">Quattro indici, un solo flusso</string>
+    <string name="onboarding_pagina1_descrizione">PASI, EASI, BMI e BSA con la stessa struttura di inserimento: impari una volta, li usi tutti.</string>
+    <string name="onboarding_pagina2_titolo">Il punteggio si aggiorna mentre tocchi</string>
+    <string name="onboarding_pagina2_descrizione">Nessun pulsante nascosto in fondo alla pagina: il totale e la classe di severità restano visibili in alto.</string>
+    <string name="onboarding_pagina3_titolo">Il paziente è opzionale</string>
+    <string name="onboarding_pagina3_descrizione">Calcola in modalità anonima quando hai fretta, oppure collega la misurazione a un paziente e segui l\'andamento nel tempo.</string>
     <string name="onboarding_azione_avanti">Avanti</string>
     <string name="onboarding_azione_inizia">Inizia</string>
     <string name="onboarding_azione_salta">Salta</string>
 
     <!-- Autenticazione locale -->
-    <string name="titolo_crea_pin">Crea un PIN</string>
-    <string name="titolo_sblocco">Sblocca DermCalc</string>
-    <string name="auth_descrizione_crea_pin">Imposta un PIN per proteggere i dati dei tuoi pazienti.</string>
-    <string name="auth_pin_label">PIN</string>
-    <string name="auth_conferma_pin_label">Conferma PIN</string>
-    <string name="auth_azione_crea_pin">Crea PIN</string>
-    <string name="auth_azione_sblocca">Sblocca</string>
-    <string name="auth_azione_biometria">Usa impronta o Face ID</string>
+    <string name="auth_crea_pin_titolo">Scegli un PIN</string>
+    <string name="auth_crea_pin_descrizione">Sei cifre per proteggere i dati dei tuoi pazienti.</string>
+    <string name="auth_conferma_pin_descrizione">Inserisci di nuovo il PIN per confermarlo.</string>
+    <string name="auth_sblocco_descrizione">Inserisci il PIN per continuare</string>
+    <string name="auth_azione_biometria">Usa l\'impronta digitale</string>
+    <string name="auth_azione_invio">Invio</string>
+    <string name="auth_azione_cancella">CANC</string>
+    <string name="auth_nota_cifratura">Dati sanitari protetti sul dispositivo</string>
+    <string name="auth_errore_lunghezza">Il PIN deve avere 6 cifre.</string>
+    <string name="auth_errore_diverso">I due PIN inseriti non coincidono.</string>
+    <string name="auth_errore_pin">PIN non corretto.</string>
+    <string name="auth_pin_aggiornato">PIN aggiornato</string>
     <string name="auth_biometria_titolo">Sblocca DermCalc</string>
     <string name="auth_biometria_sottotitolo">Usa l\'impronta digitale o il riconoscimento del volto</string>
     <string name="auth_biometria_annulla">Usa il PIN</string>
 
     <!-- Azioni comuni -->
-    <string name="azione_calcola">Calcola</string>
-    <string name="azione_pulisci">Pulisci</string>
     <string name="azione_conferma">Conferma</string>
     <string name="azione_annulla">Annulla</string>
-    <string name="azione_aggiungi">Aggiungi</string>
     <string name="azione_elimina">Elimina</string>
     <string name="azione_chiudi">Chiudi</string>
     <string name="azione_modifica">Modifica</string>
     <string name="azione_salva">Salva</string>
-
-    <!-- Guide contestuali sui parametri clinici -->
-    <string name="icona_info">ⓘ</string>
-    <string name="spiegazione_eritema">Intensità del rossore della cute nella zona interessata, da assente a molto intenso.</string>
-    <string name="spiegazione_area">Percentuale di superficie del distretto corporeo interessata dalla lesione: 0 (nessuna), 1 (&lt;10%%), 2 (10-29%%), 3 (30-49%%), 4 (50-69%%), 5 (70-89%%), 6 (90-100%%).</string>
-    <string name="spiegazione_pasi_indurimento">Spessore e consistenza della placca cutanea: quanto la pelle risulta ispessita al tatto.</string>
-    <string name="spiegazione_pasi_desquamazione">Quantità di squame visibili sulla superficie della lesione.</string>
-    <string name="spiegazione_easi_edema_papulazione">Presenza di gonfiore o di piccoli rilievi (papule) nella cute interessata.</string>
-    <string name="spiegazione_easi_escoriazioni">Segni lasciati sulla pelle dal grattamento causato dal prurito.</string>
-    <string name="spiegazione_easi_lichenificazione">Ispessimento della pelle con accentuazione delle pieghe cutanee, dovuto a grattamento cronico.</string>
-
-    <!-- Spiegazione del calcolo (PASI/EASI) -->
+    <string name="azione_azzera">Azzera</string>
+    <string name="azione_vedi_risultato">Vedi risultato</string>
     <string name="azione_dettaglio_calcolo">Come viene calcolato?</string>
-    <string name="dettaglio_calcolo_titolo">Come viene calcolato</string>
-    <string name="dettaglio_calcolo_formula_generale">Per ogni distretto: (somma dei parametri) × area × peso del distretto.</string>
-    <string name="dettaglio_calcolo_formula_voce">(%1$d) × %2$d × %3$.1f = %4$.2f</string>
-    <string name="dettaglio_calcolo_totale_formato">Totale: %1$.2f</string>
+    <string name="azione_referto_pdf">Referto PDF</string>
+    <string name="azione_salva_diario">Salva nel diario</string>
+    <string name="azione_collega_paziente">Collega a paziente</string>
+    <string name="azione_salva_misurazione">Salva misurazione</string>
+    <string name="azione_collega_e_salva">Collega a paziente e salva</string>
+    <string name="azione_nuova_misurazione">Nuova misurazione</string>
 
-    <!-- Dialog di conferma pulizia dati -->
-    <string name="dialog_pulisci_titolo">Pulisci i dati</string>
-    <string name="dialog_pulisci_messaggio">Vuoi cancellare tutti i valori inseriti in questa schermata?</string>
+    <!-- Home -->
+    <string name="home_saluto_formato">Buongiorno, Dott. %1$s</string>
+    <string name="home_sezione_calcolatori">Calcolatori</string>
+    <string name="home_sezione_recenti">Misurazioni recenti</string>
+    <string name="home_conteggio_archivio_formato">%1$d in archivio</string>
+    <string name="home_recenti_vuoto">Nessuna misurazione salvata. Collega un calcolo a un paziente per iniziare il diario.</string>
+    <string name="home_paziente_attivo">Paziente attivo</string>
+    <string name="home_modalita_anonima">Modalità anonima</string>
+    <string name="home_senza_paziente">Senza paziente</string>
+    <string name="home_azione_cambia">Cambia</string>
+    <string name="home_azione_collega">Collega</string>
 
-    <!-- Schermata Pazienti -->
-    <string name="pazienti_vuoto">Nessun paziente registrato. Tocca + per aggiungerne uno.</string>
+    <!-- Descrizioni dei calcolatori in Home -->
+    <string name="calcolatore_pasi_descrizione">Psoriasi · area e severità</string>
+    <string name="calcolatore_easi_descrizione">Dermatite atopica</string>
+    <string name="calcolatore_bmi_descrizione">Indice di massa corporea</string>
+    <string name="calcolatore_bsa_descrizione">Superficie corporea</string>
+    <string name="calcolatore_range_indice">0–72</string>
+    <string name="calcolatore_range_bmi">kg/m²</string>
+    <string name="calcolatore_range_bsa">0–100%</string>
+
+    <!-- Calcolatore PASI/EASI -->
+    <string name="calcolatore_area_titolo">Area coinvolta</string>
+    <string name="calcolatore_area_valore_formato">A = %1$d</string>
+    <string name="calcolatore_parametro_valore_formato">%1$d / %2$d</string>
+    <string name="calcolatore_peso_formato">peso × %1$s</string>
+    <string name="calcolatore_subtotale">subtotale</string>
+    <string name="calcolatore_su_totale">/ 72</string>
+    <string name="calcolatore_ultimo_formato">ultimo %1$s</string>
+
+    <!-- Risultato -->
+    <string name="risultato_totale_formato">%1$s TOTALE</string>
+    <string name="risultato_severita_formato">Severità %1$s</string>
+    <string name="risultato_contributo_titolo">Contributo per distretto</string>
+    <string name="risultato_scala_formato">soglie %1$s su scala 0–72</string>
+    <string name="risultato_salvato_formato">%1$s %2$s salvato per %3$s</string>
+
+    <!-- BMI -->
+    <string name="bmi_peso">Peso</string>
+    <string name="bmi_altezza">Altezza</string>
+    <string name="bmi_unita_peso">kg</string>
+    <string name="bmi_unita_altezza">cm</string>
+    <string name="bmi_unita">kg/m²</string>
+    <string name="bmi_categoria_sottopeso">Sottopeso</string>
+    <string name="bmi_categoria_normopeso">Normopeso</string>
+    <string name="bmi_categoria_sovrappeso">Sovrappeso</string>
+    <string name="bmi_categoria_obesita">Obesità</string>
+    <string name="bmi_nota">Il BMI è richiesto da molti protocolli per i farmaci biologici: il dosaggio di alcune terapie sistemiche dipende dal peso corporeo.</string>
+
+    <!-- BSA -->
+    <string name="bsa_sezione_distretti">Distretti coinvolti</string>
+    <string name="bsa_regola_palmo_titolo">Regola del palmo</string>
+    <string name="bsa_regola_palmo_descrizione">1 palmo del paziente ≈ 1% · per lesioni sparse</string>
+    <string name="bsa_categoria_lieve">Estensione lieve</string>
+    <string name="bsa_categoria_moderata">Estensione moderata</string>
+    <string name="bsa_categoria_severa">Estensione severa</string>
+
+    <!-- Regioni BSA -->
+    <string name="bsa_regione_testa_collo_anteriore">Testa e collo ant.</string>
+    <string name="bsa_regione_testa_collo_posteriore">Testa e collo post.</string>
+    <string name="bsa_regione_tronco_anteriore">Torace e addome</string>
+    <string name="bsa_regione_tronco_posteriore">Schiena</string>
+    <string name="bsa_regione_braccio_destro_anteriore">Braccio dx ant.</string>
+    <string name="bsa_regione_braccio_destro_posteriore">Braccio dx post.</string>
+    <string name="bsa_regione_braccio_sinistro_anteriore">Braccio sx ant.</string>
+    <string name="bsa_regione_braccio_sinistro_posteriore">Braccio sx post.</string>
+    <string name="bsa_regione_gamba_destra_anteriore">Gamba dx ant.</string>
+    <string name="bsa_regione_gamba_destra_posteriore">Gamba dx post.</string>
+    <string name="bsa_regione_gamba_sinistra_anteriore">Gamba sx ant.</string>
+    <string name="bsa_regione_gamba_sinistra_posteriore">Gamba sx post.</string>
+    <string name="bsa_regione_area_genitale">Area genitale</string>
+
+    <!-- Pazienti -->
+    <plurals name="pazienti_conteggio">
+        <item quantity="one">%1$d attivo</item>
+        <item quantity="other">%1$d attivi</item>
+    </plurals>
+    <string name="pazienti_cerca">Cerca per nome o cognome</string>
+    <string name="pazienti_vuoto_titolo">Nessun paziente</string>
+    <string name="pazienti_vuoto_descrizione">Aggiungi il primo paziente, oppure usa i calcolatori in modalità anonima.</string>
+    <string name="pazienti_nessun_risultato">Nessun paziente corrisponde alla ricerca.</string>
+    <string name="pazienti_azione_nuovo">Nuovo paziente</string>
     <string name="pazienti_nome_label">Nome</string>
     <string name="pazienti_cognome_label">Cognome</string>
     <string name="pazienti_sesso_label">Sesso</string>
-    <string name="pazienti_sesso_maschio">Maschio</string>
-    <string name="pazienti_sesso_femmina">Femmina</string>
+    <string name="pazienti_sesso_maschio">M</string>
+    <string name="pazienti_sesso_femmina">F</string>
+    <string name="pazienti_sesso_altro">Altro</string>
     <string name="pazienti_data_nascita_label">Data di nascita</string>
-    <string name="pazienti_data_non_selezionata">Nessuna data selezionata</string>
-    <string name="pazienti_seleziona_data">Seleziona data</string>
-    <string name="pazienti_dialog_aggiungi_titolo">Nuovo paziente</string>
-    <string name="pazienti_dialog_modifica_titolo">Modifica paziente</string>
-    <string name="pazienti_dialog_elimina_titolo">Elimina paziente</string>
-    <string name="pazienti_dialog_elimina_messaggio">Vuoi eliminare %1$s? L\'operazione non può essere annullata.</string>
-    <string name="pazienti_data_nascita_formato">Data di nascita: %1$s</string>
-    <string name="pazienti_eta_formato">Età: %1$d anni</string>
+    <string name="pazienti_data_nascita_segnaposto">gg/mm/aaaa</string>
+    <string name="pazienti_segnaposto_nome">Elena</string>
+    <string name="pazienti_segnaposto_cognome">Bianchi</string>
+    <string name="pazienti_nota_privacy">Il paziente viene salvato solo su questo dispositivo. Non inserire dati identificativi che non ti servono clinicamente.</string>
+    <string name="pazienti_errore_nome">Nome e cognome sono obbligatori.</string>
+    <string name="pazienti_errore_data_formato">Data di nascita non valida: usa gg/mm/aaaa.</string>
+    <string name="pazienti_errore_data_intervallo">Data di nascita fuori intervallo.</string>
+    <string name="pazienti_errore_duplicato">Esiste già un paziente con questi dati.</string>
+    <string name="pazienti_salvato_formato">%1$s aggiunto · paziente attivo</string>
+    <string name="pazienti_aggiornato">Scheda paziente aggiornata</string>
+    <string name="pazienti_meta_formato">%1$d anni · %2$s</string>
+    <string name="pazienti_meta_estesa_formato">%1$d anni · %2$s · %3$s</string>
+    <string name="pazienti_eliminato">Paziente eliminato</string>
+    <string name="pazienti_dialog_elimina_titolo">Eliminare il paziente?</string>
+    <string name="pazienti_dialog_elimina_messaggio">Vengono rimossi %1$s e tutte le sue misurazioni. L\'operazione non è reversibile.</string>
 
-    <!-- Schermata Dettaglio Paziente -->
-    <string name="dettaglio_storico_titolo">Storico misurazioni</string>
-    <string name="dettaglio_storico_vuoto">Nessuna misurazione registrata per questo paziente.</string>
-    <string name="storico_voce_risultato_formato">%1$s: %2$.2f</string>
-    <string name="storico_voce_data_formato">Misurato il %1$s</string>
-    <string name="storico_differenza_formato">%1$+.1f rispetto al %2$s</string>
-    <string name="andamento_titolo">Andamento nel tempo</string>
-    <string name="andamento_vuoto">Servono almeno due misurazioni dello stesso tipo per mostrare un grafico.</string>
-    <string name="storico_filtro_tutti">Tutti</string>
-    <string name="misurazione_dialog_elimina_titolo">Elimina misurazione</string>
-    <string name="misurazione_dialog_elimina_messaggio">Vuoi eliminare questa misurazione %1$s del %2$s? L\'operazione non può essere annullata.</string>
+    <!-- Scheda paziente -->
+    <string name="scheda_andamento_titolo">Andamento</string>
+    <string name="scheda_storico_titolo">Storico misurazioni</string>
+    <plurals name="scheda_storico_conteggio">
+        <item quantity="one">%1$d voce</item>
+        <item quantity="other">%1$d voci</item>
+    </plurals>
+    <string name="scheda_storico_vuoto">Nessuna misurazione registrata.</string>
+    <string name="scheda_storico_filtro_vuoto">Nessuna misurazione per gli indici selezionati.</string>
+    <string name="scheda_filtro_tutti">Tutti</string>
+    <string name="scheda_stat_misure">MISURE</string>
+    <string name="scheda_stat_totale">in totale</string>
+    <string name="scheda_grafico_vuoto_nessuna_formato">Nessuna misurazione %1$s</string>
+    <string name="scheda_grafico_vuoto_una_formato">Una sola misurazione %1$s</string>
+    <string name="scheda_grafico_vuoto_descrizione">Servono almeno due misurazioni dello stesso indice per disegnare l\'andamento.</string>
+    <plurals name="scheda_grafico_span">
+        <item quantity="one">%1$d misurazione</item>
+        <item quantity="other">%1$d misurazioni</item>
+    </plurals>
+    <string name="scheda_grafico_trend_formato">%1$s dal %2$s</string>
+    <string name="scheda_confronto_formato">%1$s %2$s il %3$s</string>
+    <string name="scheda_nessun_confronto">nessun confronto precedente</string>
+    <string name="scheda_azioni_paziente">Azioni sul paziente</string>
+    <string name="scheda_azione_attivo">Imposta come paziente attivo</string>
+    <string name="scheda_azione_attivo_descrizione">I nuovi calcoli si salvano qui</string>
+    <string name="scheda_azione_modifica_descrizione">Correggi anagrafica e data di nascita</string>
+    <string name="scheda_azione_esporta">Esporta scheda</string>
+    <string name="scheda_azione_esporta_descrizione">File JSON con anagrafica e misurazioni</string>
+    <string name="scheda_azione_elimina_descrizione">Rimuove il paziente e il suo storico</string>
+    <string name="scheda_collegato_formato">Collegato a %1$s</string>
 
-    <!-- Selettore paziente (BMI/BSA/PASI/EASI) -->
-    <string name="selettore_paziente_label">Paziente</string>
-    <string name="selettore_paziente_anonimo">Misurazione anonima</string>
-    <string name="bsa_azione_salva">Salva misurazione</string>
-    <string name="messaggio_salvata_paziente_formato">✓ Misurazione salvata per %1$s.</string>
+    <!-- Misurazioni -->
+    <string name="misurazione_azioni_titolo_formato">%1$s %2$s</string>
+    <string name="misurazione_azione_modifica">Modifica misurazione</string>
+    <string name="misurazione_azione_modifica_descrizione">Riapri il calcolatore con questo paziente</string>
+    <string name="misurazione_azione_elimina">Elimina misurazione</string>
+    <string name="misurazione_azione_elimina_descrizione_formato">Rimuove il dato dal diario di %1$s</string>
+    <string name="misurazione_dialog_elimina_titolo">Eliminare la misurazione?</string>
+    <string name="misurazione_dialog_elimina_messaggio_formato">%1$s %2$s del %3$s. L\'operazione non è reversibile.</string>
+    <string name="misurazione_eliminata">Misurazione eliminata</string>
 
-    <!-- Componente ParametroSlider -->
-    <string name="formato_parametro_slider">%1$s: %2$d</string>
+    <!-- Selettore paziente -->
+    <string name="selettore_titolo">Collega a un paziente</string>
+    <string name="selettore_anonimo">Senza paziente</string>
+    <string name="selettore_anonimo_descrizione">Calcolo anonimo, non salvato</string>
+    <string name="selettore_anonimo_attivo">Modalità anonima attiva</string>
 
-    <!-- BMI -->
-    <string name="bmi_label_peso">Peso (kg)</string>
-    <string name="bmi_label_altezza">Altezza (m)</string>
-    <string name="bmi_risultato_formato">BMI: %1$.2f</string>
+    <!-- Impostazioni -->
+    <string name="impostazioni_nota_account">Account locale. Nessun dato lascia il dispositivo: il backup è un file che gestisci tu.</string>
+    <string name="impostazioni_sezione_dati">Dati</string>
+    <string name="impostazioni_sezione_sicurezza">Sicurezza</string>
+    <string name="impostazioni_esporta">Esporta dati</string>
+    <plurals name="impostazioni_conteggio_pazienti">
+        <item quantity="one">%1$d paziente</item>
+        <item quantity="other">%1$d pazienti</item>
+    </plurals>
+    <plurals name="impostazioni_conteggio_misurazioni">
+        <item quantity="one">%1$d misurazione</item>
+        <item quantity="other">%1$d misurazioni</item>
+    </plurals>
+    <string name="impostazioni_esporta_descrizione_formato">%1$s · %2$s</string>
+    <string name="impostazioni_importa">Importa dati</string>
+    <string name="impostazioni_importa_descrizione">Da un file di backup DermCalc</string>
+    <string name="impostazioni_elimina_tutto">Elimina tutti i dati</string>
+    <string name="impostazioni_elimina_tutto_descrizione">Azzera l\'archivio su questo dispositivo</string>
+    <string name="impostazioni_cambia_pin">Cambia PIN</string>
+    <string name="impostazioni_cambia_pin_descrizione">6 cifre · richiesto a ogni avvio</string>
+    <string name="impostazioni_biometria">Sblocco biometrico</string>
+    <string name="impostazioni_biometria_descrizione">Impronta digitale al posto del PIN</string>
+    <string name="impostazioni_dialog_importa_titolo">Importare un backup?</string>
+    <string name="impostazioni_dialog_importa_messaggio">I pazienti e le misurazioni presenti nel file verranno aggiunti all\'archivio locale. I dati attuali non vengono cancellati.</string>
+    <string name="impostazioni_dialog_importa_conferma">Scegli file</string>
+    <string name="impostazioni_dialog_elimina_titolo">Eliminare tutti i dati?</string>
+    <string name="impostazioni_dialog_elimina_messaggio">Vengono rimossi tutti i pazienti e tutte le misurazioni salvate su questo dispositivo. L\'operazione non è reversibile.</string>
+    <string name="impostazioni_dialog_elimina_conferma">Elimina tutto</string>
+    <string name="impostazioni_archivio_svuotato">Archivio locale svuotato</string>
+    <string name="impostazioni_esportazione_annullata">Esportazione annullata</string>
+    <string name="impostazioni_importazione_annullata">Nessun file selezionato</string>
+    <string name="impostazioni_esportato_formato">%1$s esportato</string>
+    <string name="impostazioni_importato_formato">Importati %1$d pazienti e %2$d misurazioni</string>
+    <string name="impostazioni_importazione_fallita">File non valido: nessun dato importato</string>
 
-    <!-- BSA -->
-    <string name="bsa_istruzioni">Seleziona le aree corporee coinvolte:</string>
-    <string name="bsa_area_vuota">Seleziona almeno un\'area per calcolare la BSA.</string>
-    <string name="bsa_risultato_formato">BSA: %1$d%%</string>
-    <string name="bsa_regione_formato">%1$s (%2$d%%)</string>
+    <!-- Referto PDF -->
+    <string name="referto_condividi">Condividi il referto</string>
+    <string name="referto_generato">Referto PDF pronto per la condivisione</string>
+    <string name="referto_fallito">Non è stato possibile generare il referto</string>
+    <string name="referto_titolo">Referto dermatologico</string>
+    <string name="referto_paziente">Paziente</string>
+    <string name="referto_misurazioni">Misurazioni</string>
+    <string name="referto_nessuna_misurazione">Nessuna misurazione registrata</string>
+    <string name="referto_emesso_formato">Emesso il %1$s</string>
 
-    <!-- Regioni BSA (regola del nove) -->
-    <string name="bsa_regione_testa_collo">Testa e collo</string>
-    <string name="bsa_regione_arto_superiore_destro">Arto superiore destro</string>
-    <string name="bsa_regione_arto_superiore_sinistro">Arto superiore sinistro</string>
-    <string name="bsa_regione_tronco_anteriore">Tronco anteriore</string>
-    <string name="bsa_regione_tronco_posteriore">Tronco posteriore</string>
-    <string name="bsa_regione_arto_inferiore_destro">Arto inferiore destro</string>
-    <string name="bsa_regione_arto_inferiore_sinistro">Arto inferiore sinistro</string>
-    <string name="bsa_regione_genitali">Genitali</string>
-
-    <!-- Distretti corporei PASI/EASI -->
-    <string name="distretto_testa">Testa</string>
-    <string name="distretto_testa_collo">Testa e collo</string>
-    <string name="distretto_arti_superiori">Arti superiori</string>
-    <string name="distretto_tronco">Tronco</string>
-    <string name="distretto_arti_inferiori">Arti inferiori</string>
-
-    <!-- Parametri clinici condivisi PASI/EASI -->
-    <string name="param_eritema">Eritema</string>
-    <string name="param_area">Area</string>
-
-    <!-- Parametri clinici PASI -->
-    <string name="pasi_param_indurimento">Indurimento</string>
-    <string name="pasi_param_desquamazione">Desquamazione</string>
-    <string name="pasi_risultato_formato">PASI: %1$.1f (%2$s)</string>
-
-    <!-- Parametri clinici EASI -->
-    <string name="easi_param_edema_papulazione">Edema/Papulazione</string>
-    <string name="easi_param_escoriazioni">Escoriazioni</string>
-    <string name="easi_param_lichenificazione">Lichenificazione</string>
-    <string name="easi_risultato_formato">EASI: %1$.1f</string>
+    <!-- Nomi dei file generati -->
+    <string name="file_backup_formato">dermcalc-backup-%1$s.json</string>
+    <string name="file_scheda_formato">scheda-%1$s.json</string>
+    <string name="file_referto_formato">referto-%1$s.pdf</string>
 </resources>

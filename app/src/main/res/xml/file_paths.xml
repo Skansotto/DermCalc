@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Referti e schede generati dall'app restano nella cache: sono file temporanei
+         creati solo per essere condivisi con un'altra app. -->
+    <cache-path name="referti" path="referti/" />
+    <cache-path name="esportazioni" path="esportazioni/" />
+</paths>

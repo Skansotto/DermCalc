@@ -1,5 +1,8 @@
 package com.casati.dermcalc.ui.screens.pazienti
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,278 +10,232 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.casati.dermcalc.DermCalcApplication
 import com.casati.dermcalc.R
-import com.casati.dermcalc.data.local.PazienteEntity
-import com.casati.dermcalc.data.local.Sesso
-import com.casati.dermcalc.ui.components.ConfermaDialog
+import com.casati.dermcalc.domain.Severita
+import com.casati.dermcalc.domain.calcolaEta
+import com.casati.dermcalc.domain.iniziali
+import com.casati.dermcalc.domain.nomeCompleto
+import com.casati.dermcalc.domain.variazione
+import com.casati.dermcalc.ui.components.CampoRicerca
+import com.casati.dermcalc.ui.components.ChipVariazione
+import com.casati.dermcalc.ui.components.Pastiglia
+import com.casati.dermcalc.ui.components.PulsanteAzione
+import com.casati.dermcalc.ui.shared.PazienteSelezionabile
+import com.casati.dermcalc.ui.shared.SelezionePazienteViewModel
+import com.casati.dermcalc.ui.theme.Bordo
+import com.casati.dermcalc.ui.theme.BordoTenue
+import com.casati.dermcalc.ui.theme.Indaco
+import com.casati.dermcalc.ui.theme.IndacoTenue
+import com.casati.dermcalc.ui.theme.MonoMedio
+import com.casati.dermcalc.ui.theme.MonoMinuto
+import com.casati.dermcalc.ui.theme.MonoPiccolo
+import com.casati.dermcalc.ui.theme.Sfondo
+import com.casati.dermcalc.ui.theme.Superficie
+import com.casati.dermcalc.ui.theme.SuperficieCalda
+import com.casati.dermcalc.ui.theme.TestoDebole
+import com.casati.dermcalc.ui.theme.TestoLeggero
+import com.casati.dermcalc.ui.theme.TestoMedio
+import com.casati.dermcalc.ui.theme.TestoSpento
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.text.TextStyle
+import com.casati.dermcalc.ui.theme.Inchiostro
+import com.casati.dermcalc.ui.theme.Jakarta
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PazienteListScreen(
+    viewModel: PazienteViewModel,
+    selezioneViewModel: SelezionePazienteViewModel,
+    pazienteCollegatoId: Long?,
     onPazienteClick: (Long) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: PazienteViewModel = viewModel(
-        factory = PazienteViewModel.Factory(
-            (LocalContext.current.applicationContext as DermCalcApplication).pazienteRepository
-        )
-    )
+    onNuovoPaziente: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val pazienti by viewModel.pazienti.collectAsState()
-    var mostraDialogAggiungi by remember { mutableStateOf(false) }
-    var pazienteDaModificare by remember { mutableStateOf<PazienteEntity?>(null) }
-    var pazienteDaEliminare by remember { mutableStateOf<PazienteEntity?>(null) }
-
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.titolo_pazienti)) }) },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { mostraDialogAggiungi = true }) {
-                Text("+")
-            }
-        }
-    ) { innerPadding ->
-        if (pazienti.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.pazienti_vuoto),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(32.dp)
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(pazienti, key = { it.id }) { paziente ->
-                    PazienteRiga(
-                        paziente = paziente,
-                        onClick = { onPazienteClick(paziente.id) },
-                        onModificaClick = { pazienteDaModificare = paziente },
-                        onEliminaClick = { pazienteDaEliminare = paziente }
-                    )
-                }
-            }
-        }
+    val pazienti by selezioneViewModel.pazienti.collectAsState()
+    val ricerca by viewModel.ricerca.collectAsState()
+    val filtrati = pazienti.filter { voce ->
+        ricerca.isBlank() || voce.paziente.nomeCompleto.contains(ricerca.trim(), ignoreCase = true)
     }
 
-    if (mostraDialogAggiungi) {
-        PazienteFormDialog(
-            pazienteIniziale = null,
-            onConferma = { nome, cognome, sesso, dataNascita ->
-                viewModel.aggiungiPaziente(nome, cognome, sesso, dataNascita)
-                mostraDialogAggiungi = false
-            },
-            onAnnulla = { mostraDialogAggiungi = false }
-        )
-    }
-
-    pazienteDaModificare?.let { paziente ->
-        PazienteFormDialog(
-            pazienteIniziale = paziente,
-            onConferma = { nome, cognome, sesso, dataNascita ->
-                viewModel.aggiornaPaziente(paziente, nome, cognome, sesso, dataNascita)
-                pazienteDaModificare = null
-            },
-            onAnnulla = { pazienteDaModificare = null }
-        )
-    }
-
-    pazienteDaEliminare?.let { paziente ->
-        ConfermaDialog(
-            titolo = stringResource(R.string.pazienti_dialog_elimina_titolo),
-            messaggio = stringResource(R.string.pazienti_dialog_elimina_messaggio, paziente.nomeCompleto),
-            onConferma = {
-                viewModel.eliminaPaziente(paziente)
-                pazienteDaEliminare = null
-            },
-            onAnnulla = { pazienteDaEliminare = null }
-        )
-    }
-}
-
-@Composable
-private fun PazienteRiga(
-    paziente: PazienteEntity,
-    onClick: () -> Unit,
-    onModificaClick: () -> Unit,
-    onEliminaClick: () -> Unit
-) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    Column(modifier = modifier.fillMaxSize().background(Sfondo)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
-                Text(text = paziente.nomeCompleto, style = MaterialTheme.typography.titleMedium)
-                Text(
-                    text = stringResource(R.string.pazienti_eta_formato, calcolaEta(paziente.dataNascita)),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-            Row {
-                TextButton(onClick = onModificaClick) {
-                    Text(stringResource(R.string.azione_modifica))
+            Text(
+                text = stringResource(R.string.titolo_pazienti),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = pluralStringResource(
+                    R.plurals.pazienti_conteggio,
+                    pazienti.size,
+                    pazienti.size
+                ),
+                style = MonoPiccolo,
+                color = TestoDebole
+            )
+        }
+
+        CampoRicerca(
+            valore = ricerca,
+            onValoreChange = viewModel::onRicercaChange,
+            segnaposto = stringResource(R.string.pazienti_cerca),
+            modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 12.dp)
+        )
+
+        if (filtrati.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(SuperficieCalda),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "◍", style = MonoMedio, color = TestoSpento)
                 }
-                TextButton(onClick = onEliminaClick) {
-                    Text(stringResource(R.string.azione_elimina))
+                Text(
+                    text = stringResource(
+                        if (pazienti.isEmpty()) R.string.pazienti_vuoto_titolo
+                        else R.string.pazienti_nessun_risultato
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+                if (pazienti.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.pazienti_vuoto_descrizione),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TestoDebole,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(start = 18.dp, end = 18.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filtrati, key = { it.paziente.id }) { voce ->
+                    RigaPaziente(
+                        voce = voce,
+                        attivo = voce.paziente.id == pazienteCollegatoId,
+                        onClick = { onPazienteClick(voce.paziente.id) }
+                    )
                 }
             }
         }
+
+        PulsanteAzione(
+            testo = "+  " + stringResource(R.string.pazienti_azione_nuovo),
+            altezza = 50,
+            onClick = onNuovoPaziente,
+            modifier = Modifier.padding(start = 18.dp, end = 18.dp, top = 10.dp, bottom = 12.dp)
+        )
     }
 }
 
-// Dialog condiviso per creare un nuovo paziente o modificarne uno esistente:
-// con pazienteIniziale nullo si comporta come form di creazione, altrimenti precompila i campi.
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PazienteFormDialog(
-    pazienteIniziale: PazienteEntity?,
-    onConferma: (nome: String, cognome: String, sesso: Sesso, dataNascita: Long) -> Unit,
-    onAnnulla: () -> Unit
+private fun RigaPaziente(
+    voce: PazienteSelezionabile,
+    attivo: Boolean,
+    onClick: () -> Unit
 ) {
-    var nome by remember { mutableStateOf(pazienteIniziale?.nome.orEmpty()) }
-    var cognome by remember { mutableStateOf(pazienteIniziale?.cognome.orEmpty()) }
-    var sesso by remember { mutableStateOf(pazienteIniziale?.sesso) }
-    var mostraDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = pazienteIniziale?.dataNascita)
-
-    AlertDialog(
-        onDismissRequest = onAnnulla,
-        title = {
+    val ultima = voce.ultimaMisurazione
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Superficie)
+            .border(1.dp, Bordo, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 13.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Pastiglia(
+            testo = voce.paziente.iniziali,
+            sfondo = if (attivo) IndacoTenue else SuperficieCalda,
+            colore = if (attivo) Indaco else TestoMedio,
+            lato = 40,
+            raggio = 13,
+            stile = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+        )
+        Column(modifier = Modifier.weight(1f)) {
             Text(
-                stringResource(
-                    if (pazienteIniziale == null) {
-                        R.string.pazienti_dialog_aggiungi_titolo
-                    } else {
-                        R.string.pazienti_dialog_modifica_titolo
-                    }
-                )
+                text = voce.paziente.nomeCompleto,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-        },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(
-                    value = nome,
-                    onValueChange = { nome = it },
-                    label = { Text(stringResource(R.string.pazienti_nome_label)) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = cognome,
-                    onValueChange = { cognome = it },
-                    label = { Text(stringResource(R.string.pazienti_cognome_label)) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Text(
-                    text = stringResource(R.string.pazienti_sesso_label),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(
-                        selected = sesso == Sesso.MASCHIO,
-                        onClick = { sesso = Sesso.MASCHIO },
-                        label = { Text(stringResource(R.string.pazienti_sesso_maschio)) }
-                    )
-                    FilterChip(
-                        selected = sesso == Sesso.FEMMINA,
-                        onClick = { sesso = Sesso.FEMMINA },
-                        label = { Text(stringResource(R.string.pazienti_sesso_femmina)) }
-                    )
-                }
-                Text(
-                    text = stringResource(R.string.pazienti_data_nascita_label),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                TextButton(onClick = { mostraDatePicker = true }) {
-                    Text(
-                        datePickerState.selectedDateMillis?.let { formattaData(it) }
-                            ?: stringResource(R.string.pazienti_data_non_selezionata)
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            val dataNascita = datePickerState.selectedDateMillis
-            val sessoScelto = sesso
-            TextButton(
-                onClick = {
-                    onConferma(nome, cognome, sessoScelto ?: return@TextButton, dataNascita ?: return@TextButton)
-                },
-                enabled = nome.isNotBlank() && cognome.isNotBlank() && sessoScelto != null && dataNascita != null
-            ) {
-                Text(
-                    stringResource(
-                        if (pazienteIniziale == null) R.string.azione_aggiungi else R.string.azione_salva
-                    )
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onAnnulla) { Text(stringResource(R.string.azione_annulla)) }
+            Text(
+                text = stringResource(
+                    R.string.pazienti_meta_formato,
+                    calcolaEta(voce.paziente.dataNascita),
+                    voce.paziente.sesso.sigla
+                ),
+                style = MonoMinuto,
+                color = TestoDebole
+            )
         }
-    )
-
-    if (mostraDatePicker) {
-        DatePickerDialog(
-            onDismissRequest = { mostraDatePicker = false },
-            confirmButton = {
-                TextButton(onClick = { mostraDatePicker = false }) {
-                    Text(stringResource(R.string.azione_conferma))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { mostraDatePicker = false }) {
-                    Text(stringResource(R.string.azione_annulla))
+        Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                Text(
+                    text = ultima?.tipo?.name.orEmpty(),
+                    style = MonoMinuto,
+                    color = TestoLeggero
+                )
+                Text(
+                    text = ultima?.let { Severita.formattaValore(it.tipo, it.risultato) } ?: "—",
+                    style = MonoMedio,
+                    color = ultima?.let { Severita.colorePunteggio(it.tipo, it.risultato) } ?: TestoSpento
+                )
+            }
+            if (ultima != null) {
+                val delta = variazione(voce.deltaUltima, ultima.tipo)
+                ChipVariazione(delta.etichetta, delta.colore, delta.tinta)
+            } else {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(BordoTenue)
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(text = "nuovo", style = MonoMinuto, color = TestoDebole)
                 }
             }
-        ) {
-            DatePicker(state = datePickerState)
         }
     }
 }

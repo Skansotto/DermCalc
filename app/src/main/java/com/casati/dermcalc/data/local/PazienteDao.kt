@@ -13,15 +13,27 @@ interface PazienteDao {
     @Insert
     suspend fun inserisci(paziente: PazienteEntity): Long
 
+    @Insert
+    suspend fun inserisciTutti(pazienti: List<PazienteEntity>): List<Long>
+
     @Update
     suspend fun aggiorna(paziente: PazienteEntity)
 
     @Delete
     suspend fun elimina(paziente: PazienteEntity)
 
+    @Query("DELETE FROM pazienti")
+    suspend fun eliminaTutti()
+
     @Query("SELECT * FROM pazienti ORDER BY cognome ASC, nome ASC")
     fun osservaTutti(): Flow<List<PazienteEntity>>
 
+    @Query("SELECT * FROM pazienti ORDER BY cognome ASC, nome ASC")
+    suspend fun leggiTutti(): List<PazienteEntity>
+
     @Query("SELECT * FROM pazienti WHERE id = :id")
     suspend fun trovaPerId(id: Long): PazienteEntity?
+
+    @Query("SELECT * FROM pazienti WHERE id = :id")
+    fun osservaPerId(id: Long): Flow<PazienteEntity?>
 }

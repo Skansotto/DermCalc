@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Marchio DermCalc: un dermatoscopio, cioè la lente con cui il dermatologo guarda
+  la lesione da vicino. Il punto pieno al centro è la lesione a fuoco.
+  Il tratto è pensato per essere tinto dal chiamante.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+
+    <path
+        android:pathData="M10.6,10.6m-6.15,0a6.15,6.15 0,1 1,12.3 0a6.15,6.15 0,1 1,-12.3 0"
+        android:strokeColor="#000000"
+        android:strokeWidth="2.3"
+        android:strokeLineCap="round" />
+
+    <path
+        android:pathData="M10.6,10.6m-2.15,0a2.15,2.15 0,1 1,4.3 0a2.15,2.15 0,1 1,-4.3 0"
+        android:fillColor="#000000" />
+
+    <path
+        android:pathData="M15.35,15.35L20.1,20.1"
+        android:strokeColor="#000000"
+        android:strokeWidth="2.7"
+        android:strokeLineCap="round" />
+</vector>

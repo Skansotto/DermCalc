@@ -2,6 +2,7 @@ package com.casati.dermcalc.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.casati.dermcalc.data.local.ImpostazioniManager
 import com.casati.dermcalc.data.local.PinManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,55 +11,56 @@ import kotlinx.coroutines.flow.update
 data class AuthUiState(
     val pinConfigurato: Boolean,
     val sbloccato: Boolean = false,
-    val messaggioErrore: String? = null
+    val biometriaAttiva: Boolean = true
 )
 
-class AuthViewModel(private val pinManager: PinManager) : ViewModel() {
+class AuthViewModel(
+    private val pinManager: PinManager,
+    private val impostazioniManager: ImpostazioniManager
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AuthUiState(pinConfigurato = pinManager.isPinConfigurato()))
+    private val _uiState = MutableStateFlow(
+        AuthUiState(
+            pinConfigurato = pinManager.isPinConfigurato(),
+            biometriaAttiva = impostazioniManager.isBiometriaAttiva()
+        )
+    )
     val uiState: StateFlow<AuthUiState> = _uiState
 
-    fun impostaPin(pin: String, conferma: String) {
-        if (pin.isBlank() || conferma.isBlank()) {
-            mostraErrore("Inserisci il PIN in entrambi i campi.")
-            return
-        }
-        if (!pin.all { it.isDigit() } || pin.length !in 4..6) {
-            mostraErrore("Il PIN deve contenere da 4 a 6 cifre.")
-            return
-        }
-        if (pin != conferma) {
-            mostraErrore("I due PIN inseriti non coincidono.")
-            return
-        }
+    fun impostaPin(pin: String) {
+        if (pin.length != LUNGHEZZA_PIN) return
         pinManager.impostaPin(pin)
-        _uiState.update { it.copy(pinConfigurato = true, sbloccato = true, messaggioErrore = null) }
+        _uiState.update { it.copy(pinConfigurato = true, sbloccato = true) }
     }
 
-    fun verificaPin(pin: String) {
-        if (pin.isBlank()) {
-            mostraErrore("Inserisci il PIN.")
-            return
+    fun verificaPin(pin: String): Boolean {
+        val corretto = pinManager.verificaPin(pin)
+        if (corretto) {
+            _uiState.update { it.copy(sbloccato = true) }
         }
-        if (pinManager.verificaPin(pin)) {
-            _uiState.update { it.copy(sbloccato = true, messaggioErrore = null) }
-        } else {
-            mostraErrore("PIN non corretto.")
-        }
+        return corretto
     }
 
     fun sbloccaConBiometria() {
-        _uiState.update { it.copy(sbloccato = true, messaggioErrore = null) }
+        _uiState.update { it.copy(sbloccato = true) }
     }
 
-    private fun mostraErrore(messaggio: String) {
-        _uiState.update { it.copy(messaggioErrore = messaggio) }
+    fun impostaBiometria(attiva: Boolean) {
+        impostazioniManager.impostaBiometria(attiva)
+        _uiState.update { it.copy(biometriaAttiva = attiva) }
     }
 
-    class Factory(private val pinManager: PinManager) : ViewModelProvider.Factory {
+    companion object {
+        const val LUNGHEZZA_PIN = 6
+    }
+
+    class Factory(
+        private val pinManager: PinManager,
+        private val impostazioniManager: ImpostazioniManager
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AuthViewModel(pinManager) as T
+            return AuthViewModel(pinManager, impostazioniManager) as T
         }
     }
 }
